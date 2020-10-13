@@ -1,5 +1,7 @@
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Repository;
 
 namespace _02_DependencyInjection
 {
@@ -7,7 +9,10 @@ namespace _02_DependencyInjection
     {
         public static void Configure(IServiceCollection services, IConfiguration configuration)
         {
-            // Add Services to Dependency injection container here
+            services.AddDbContext<BaseContext>(options => 
+            {
+                options.UseMySql(configuration.GetConnectionString("DefaultConnection"));
+            });
         }
     }
 }
