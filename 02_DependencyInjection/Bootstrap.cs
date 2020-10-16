@@ -1,8 +1,11 @@
+using Core.Interfaces.Repository;
+using Core.Interfaces.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Repository;
+using Services;
 
 namespace _02_DependencyInjection
 {
@@ -20,6 +23,12 @@ namespace _02_DependencyInjection
                 options.EnableSensitiveDataLogging();
                 options.UseLazyLoadingProxies();
             });
+
+            services.AddTransient<IUnitOfWork, UnitOfWork>();
+            services.AddTransient<IArtigoService, ArtigoService>();
+            services.AddTransient<IAutorService, AutorService>();
+            services.AddTransient<ITemaService, TemaService>();
+            services.AddTransient<ICategoriaService, CategoriaService>();
         }
     }
 }
