@@ -15,6 +15,7 @@ namespace API
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseUrls("http://0.0.0.0");
+                    webBuilder.UseUrls("https://0.0.0.0");
                     webBuilder.UseStartup<Startup>();
                 });
     }
