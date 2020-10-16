@@ -23,5 +23,22 @@ namespace Core.Entities
         public DateTime? DataImpulsionamento { get; set; }
         public DateTime? DataPublicacao { get; set; }
 
+        public void Validar()
+        {
+            if(string.IsNullOrEmpty(Titulo))
+                throw new ArgumentException("É necessário informar o titulo do artigo");
+
+            if(Titulo.Length > 100)
+                throw new ArgumentException("Titulo do artigo deve possuir até 100 caracteres");
+
+            if(Descricao.Length > 255)
+                throw new ArgumentException("Descrição do artigo deve possuir até 255 caracteres");
+        }
+
+        public void Atualizar() => DataAtualizacao = DateTime.Now;
+        public void Inativar() => DataInativacao = DateTime.Now;
+        public void Remover() => DataRemocao = DateTime.Now;
+        public void Impulsionar() => DataImpulsionamento = DateTime.Now;
+
     }
 }
