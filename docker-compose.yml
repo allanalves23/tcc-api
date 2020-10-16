@@ -1,0 +1,31 @@
+version: '3.1'
+
+services: 
+
+    tcc-database:
+        container_name: tcc-database
+        image: mariadb
+        restart: always
+        command: --lower_case_table_names=1
+        environment:
+            - MYSQL_ROOT_PASSWORD=123456
+            - MYSQL_ROOT_HOST=%
+            - MYSQL_DATABASE=sa
+            - MYSQL_USER=sahost
+            - MYSQL_PASSWORD=123456
+        ports:
+            - "3306:3306"
+        volumes:
+            - data:/var/mysql/data
+
+    tcc-api:
+        container_name: tcc-api
+        depends_on: 
+            - tcc-database
+        build: .
+        restart: always
+        ports: 
+            - "5002:80"
+
+volumes:
+    data:
