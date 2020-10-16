@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Core.Interfaces;
+using Core.Interfaces.Repository;
 using Microsoft.EntityFrameworkCore;
 
 namespace Repository.Repositories
@@ -27,13 +27,20 @@ namespace Repository.Repositories
 
         public T FirstOrDefault(Func<T, bool> criteria) => Entity.FirstOrDefault(criteria);
 
-        public IEnumerable<T> Get<TReturn>(Func<T, bool> filterCriteria, int? skip = 0, int? take = 15, Func<T, TReturn> sortCriteria = null) =>
-            Entity
-                .Skip(skip.Value)
-                .Take(take.Value)
-                .Where(filterCriteria)
-                .OrderByDescending(sortCriteria)
-                .ToList();
+        public IEnumerable<T> Get<TReturn>(Func<T, bool> filterCriteria, int? skip = 0, int? take = 10, Func<T, TReturn> sortCriteria = null) =>
+            sortCriteria.Equals(null) ?
+                Entity
+                    .Skip(skip.Value)
+                    .Take(take.Value)
+                    .Where(filterCriteria)
+                    .ToList()
+            :
+                Entity
+                    .Skip(skip.Value)
+                    .Take(take.Value)
+                    .Where(filterCriteria)
+                    .OrderByDescending(sortCriteria)
+                    .ToList();
 
         public void Update(T entity) => Entity.Update(entity);
 
