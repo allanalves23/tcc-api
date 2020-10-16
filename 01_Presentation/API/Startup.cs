@@ -36,8 +36,6 @@ namespace API
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseHttpsRedirection();
-
             baseContext.Database.Migrate();
 
             app.UseRouting();
