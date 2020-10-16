@@ -1,4 +1,4 @@
-namespace Core.Interfaces
+namespace Core.Interfaces.Repository
 {
     public interface IUnitOfWork
     {
