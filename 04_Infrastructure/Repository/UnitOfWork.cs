@@ -1,3 +1,4 @@
+using System;
 using Core.Entities;
 using Core.Interfaces.Repository;
 using Microsoft.EntityFrameworkCore;
@@ -71,6 +72,15 @@ namespace Repository
         }
 
         public UnitOfWork(BaseContext context) => _context = context;
+
+        public IRepository<T> GetRepository<T>() where T : class =>
+            typeof(T) switch {
+                Type tipo when tipo == typeof(Artigo) => (IRepository<T>)ArtigoRepository,
+                Type tipo when tipo == typeof(Autor) => (IRepository<T>)AutorRepository,
+                Type tipo when tipo == typeof(Tema) => (IRepository<T>)TemaRepository,
+                Type tipo when tipo == typeof(Categoria) => (IRepository<T>)CategoriaRepository,
+                _ => null
+            };
 
         public void Commit() => _context.SaveChanges();
 

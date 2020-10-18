@@ -6,7 +6,7 @@ namespace Services
 {
     public class AutorService : BaseService<Autor>, IAutorService
     {
-        public AutorService(IUnitOfWork unitOfWork, IRepository<Autor> repository) 
-            : base(unitOfWork, repository) { }
+        public AutorService(IUnitOfWork unitOfWork) 
+            : base(unitOfWork) { }
     }
 }

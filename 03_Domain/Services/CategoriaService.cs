@@ -6,7 +6,7 @@ namespace Services
 {
     public class CategoriaService : BaseService<Categoria>, ICategoriaService
     {
-        public CategoriaService(IUnitOfWork unitOfWork, IRepository<Categoria> repository) 
-            : base(unitOfWork, repository) { }
+        public CategoriaService(IUnitOfWork unitOfWork) 
+            : base(unitOfWork) { }
     }
 }

@@ -8,8 +8,8 @@ namespace Services
 {
     public class TemaService : BaseService<Tema>, ITemaService
     {
-        public TemaService(IUnitOfWork unitOfWork, IRepository<Tema> repository) 
-            : base(unitOfWork, repository) { }
+        public TemaService(IUnitOfWork unitOfWork) 
+            : base(unitOfWork) { }
 
         public IEnumerable<Tema> Obter(string termo, int? skip, int? take) => 
             Obter(item => string.IsNullOrEmpty(termo) || item.Nome.StartsWith(termo), skip, take);

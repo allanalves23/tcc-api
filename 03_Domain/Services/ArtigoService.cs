@@ -6,7 +6,7 @@ namespace Services
 {
     public class ArtigoService : BaseService<Artigo>, IArtigoService
     {
-        public ArtigoService(IUnitOfWork unitOfWork, IRepository<Artigo> repository) 
-            : base(unitOfWork, repository) { }
+        public ArtigoService(IUnitOfWork unitOfWork) 
+            : base(unitOfWork) { }
     }
 }
