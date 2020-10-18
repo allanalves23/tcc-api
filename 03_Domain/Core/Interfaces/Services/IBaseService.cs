@@ -11,6 +11,7 @@ namespace Core.Interfaces.Services
         IEnumerable<T> Obter(Func<T, bool> criteria, int? skip = 0, int? take = 10);
         IEnumerable<T> Obter<TReturn>(Func<T, bool> criteria, Func<T, TReturn> sortCriteria, int? skip = 0, int? take = 10);
         void Excluir(Func<T, bool> criteria);
+        bool Existe(Func<T, bool> criteria);
         void Salvar();
     }
 }

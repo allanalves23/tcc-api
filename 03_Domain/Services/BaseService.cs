@@ -26,6 +26,8 @@ namespace Services
 
         public IEnumerable<T> Obter<TReturn>(Func<T, bool> criteria, Func<T, TReturn> sortCriteria, int? skip = 0, int? take = 10) => _unitOfWork.GetRepository<T>().Get(criteria, skip, take, sortCriteria);
 
+        public bool Existe(Func<T, bool> criteria) => _unitOfWork.GetRepository<T>().Exists(criteria);
+
         public void Salvar() => _unitOfWork.Commit();
 
     }
