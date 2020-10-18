@@ -9,5 +9,6 @@ namespace Core.Interfaces.Services
         Tema Obter(int? idTema);
         Tema Criar(string nome, string descricao);
         int Remover(int? idTema);
+        void Atualizar(int? idTema, string nome, string descricao);
     }
 }

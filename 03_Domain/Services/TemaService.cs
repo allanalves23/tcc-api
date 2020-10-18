@@ -12,10 +12,14 @@ namespace Services
             : base(unitOfWork) { }
 
         public IEnumerable<Tema> Obter(string termo, int? skip, int? take) => 
-            Obter(item => string.IsNullOrEmpty(termo) || item.Nome.StartsWith(termo), skip, take);
+            Obter(
+                item => (string.IsNullOrEmpty(termo) || item.Nome.StartsWith(termo)) && !item.DataRemocao.HasValue,
+                skip, 
+                take
+            );
 
         public Tema Obter(int? idTema) =>
-            Obter(item => item.Id == idTema.Value) ?? throw new ArgumentNullException("Tema não encontrado");
+            Obter(item => item.Id == idTema.Value && !item.DataRemocao.HasValue) ?? throw new ArgumentNullException("Tema não encontrado");
 
         public Tema Criar(string nome, string descricao)
         {
@@ -39,11 +43,21 @@ namespace Services
                 throw new ArgumentException("Este tema já esta removido");
             
             tema.Remover();
-
-            Atualizar(tema);
             Salvar();
 
             return tema.Id;
+        }
+
+        public void Atualizar(int? idTema, string nome, string descricao)
+        {
+            if(!idTema.HasValue)
+                throw new ArgumentException("É necessário informar o tema");
+
+            Tema tema = Obter(item => item.Id == idTema.Value && !item.DataRemocao.HasValue)
+                ?? throw new ArgumentNullException("Tema não encontrado");
+
+            tema.Atualizar(nome, descricao);
+            Salvar();
         }
     }
 }

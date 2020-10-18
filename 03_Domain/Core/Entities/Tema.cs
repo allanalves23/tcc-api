@@ -34,7 +34,12 @@ namespace Core.Entities
                 throw new ArgumentException("Descrição da categoria deve ter até 255 caracteres");
         }
 
-        public void Atualizar() => DataAtualizacao = DateTime.Now;
+        public void Atualizar(string nome, string descricao)
+        {
+            Nome = nome ?? Nome;
+            Descricao = descricao ?? Descricao;
+            DataAtualizacao = DateTime.Now;
+        }
 
         public void Remover() => DataRemocao = DateTime.Now;
 
