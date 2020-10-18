@@ -16,7 +16,7 @@ namespace API.Models
             Id = categoria?.Id;
             Nome = categoria?.Nome;
             Descricao = categoria?.Descricao;
-            Tema = categoria?.Tema == null ? new TemaModel(categoria.Tema) : null;
+            Tema = categoria?.Tema != null ? new TemaModel(categoria.Tema) : null;
         }
     }
 }
