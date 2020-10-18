@@ -7,11 +7,11 @@ namespace API.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class TemaController : ControllerBase
+    public class TemasController : ControllerBase
     {
         public ITemaService _temaService;
 
-        public TemaController(ITemaService temaService)
+        public TemasController(ITemaService temaService)
         {
             _temaService = temaService;
         }
@@ -24,10 +24,17 @@ namespace API.Controllers
         public IActionResult GetTema(int id) => Ok(new TemaModel(_temaService.Obter(id)));
 
         [HttpPost]
-        public IActionResult CreateTema([FromBody] TemaModel tema) => 
-            Created("", new TemaModel(_temaService.Criar(tema?.Nome, tema?.Descricao)));
+        public IActionResult CreateTema([FromBody] TemaModel tema) =>
+            CreatedAtAction("CreateTema", new TemaModel(_temaService.Criar(tema?.Nome, tema?.Descricao)));
+
+        [HttpPut("{id:int}")]
+        public IActionResult UpdateTema([FromBody] TemaModel tema, int id)
+        {
+            _temaService.Atualizar(id, tema?.Nome, tema?.Descricao);
+            return NoContent();
+        }
 
         [HttpDelete("{id:int}")]
-        public IActionResult UpdateTema(int id) => Ok(_temaService.Remover(id));
+        public IActionResult DeleteTema(int id) => Ok(_temaService.Remover(id));
     }
 }
