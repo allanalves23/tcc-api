@@ -19,17 +19,41 @@ namespace Services
             );
 
         public Tema Obter(int? idTema) =>
-            Obter(item => item.Id == idTema.Value && !item.DataRemocao.HasValue) ?? throw new ArgumentNullException("Tema não encontrado");
+            Obter(item => item.Id == idTema.Value && !item.DataRemocao.HasValue) 
+                ?? throw new ArgumentNullException("Tema não encontrado");
 
         public Tema Criar(string nome, string descricao)
         {
             var tema = new Tema(nome, descricao);
             tema.Validar();
+            
+            Tema temaExistente = Obter(item => item.Nome == tema.Nome);
+            if(temaExistente == null)
+                Adicionar(tema);
+            else 
+            {
+                if(temaExistente.EstaRemovido())
+                {
+                    ReativarTema(temaExistente);
+                    tema = temaExistente;
+                }
+                else
+                    throw new ArgumentException("Já existe um tema cadastrado com este nome");
+            }
 
-            Adicionar(tema);
             Salvar();
-
             return tema;
+        }
+
+        private void ReativarTema(Tema tema)
+        {
+            if(tema == null)
+                throw new InvalidOperationException("Tema não informado");
+
+            if(!tema.DataRemocao.HasValue)
+                throw new ArgumentException("Este tema já está reativado");
+
+            tema.Reativar();
         }
 
         public int Remover(int? idTema)
@@ -37,10 +61,11 @@ namespace Services
             if(!idTema.HasValue)
                 throw new ArgumentException("É necessário informar o identificador do tema");
             
-            Tema tema = Obter(item => item.Id == idTema.Value);
+            Tema tema = Obter(item => item.Id == idTema.Value) 
+                ?? throw new ArgumentNullException("Tema não encontrado");
 
             if(tema.EstaRemovido())
-                throw new ArgumentException("Este tema já esta removido");
+                throw new Exception("Este tema já esta removido");
             
             tema.Remover();
             Salvar();
@@ -57,6 +82,8 @@ namespace Services
                 ?? throw new ArgumentNullException("Tema não encontrado");
 
             tema.Atualizar(nome, descricao);
+            tema.Validar();
+
             Salvar();
         }
     }

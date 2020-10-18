@@ -43,6 +43,8 @@ namespace Core.Entities
 
         public void Remover() => DataRemocao = DateTime.Now;
 
+        public void Reativar() => DataRemocao = null;
+
         public bool EstaRemovido() => DataRemocao != null;
     }
 }
