@@ -30,7 +30,7 @@ namespace Core.Entities
             if(Nome.Length > 255)
                 throw new ArgumentException("Nome da categoria deve ter até 255 caracteres");
 
-            if(Descricao.Length > 255)
+            if(!string.IsNullOrEmpty(Descricao) && Descricao.Length > 255)
                 throw new ArgumentException("Descrição da categoria deve ter até 255 caracteres");
         }
 
@@ -38,6 +38,6 @@ namespace Core.Entities
 
         public void Remover() => DataRemocao = DateTime.Now;
 
-        public bool EstaRemovido() => !DataRemocao.Equals(null);
+        public bool EstaRemovido() => DataRemocao != null;
     }
 }

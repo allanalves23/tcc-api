@@ -26,7 +26,7 @@ namespace Core.Entities
             if(Descricao.Length > 255)
                 throw new ArgumentException("Descrição da categoria deve ter até 255 caracteres");
 
-            if(Tema.Equals(null) && TemaId.Equals(default(int)))
+            if(Tema == null && TemaId.Equals(default(int)))
                 throw new ArgumentException("É necessário informar o tema da categoria");
         }
 
