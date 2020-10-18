@@ -42,6 +42,8 @@ namespace API
 
             app.UseAuthorization();
 
+            app.UseMyMiddlewares();
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
