@@ -3,7 +3,7 @@ using Core.Entities;
 
 namespace Core.Interfaces.Services
 {
-    public interface ITemaService 
+    public interface ITemaService : IBaseService<Tema>
     { 
         IEnumerable<Tema> Obter(string termo, int? skip, int? take);
         Tema Obter(int? idTema);
