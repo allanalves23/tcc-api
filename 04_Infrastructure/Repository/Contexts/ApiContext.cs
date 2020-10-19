@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Repository.Contexts
 {
-    public class ApiContext : IdentityDbContext<ApplicationUser>
+    public class ApiContext : IdentityDbContext<Usuario>
     {
         public ApiContext(DbContextOptions<ApiContext> options)
             : base(options) { }

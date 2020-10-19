@@ -9,12 +9,12 @@ namespace API.Security
     public class IdentityInitializer
     {
         private readonly ApiContext _context;
-        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly UserManager<Usuario> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
 
         public IdentityInitializer(
             ApiContext context,
-            UserManager<ApplicationUser> userManager,
+            UserManager<Usuario> userManager,
             RoleManager<IdentityRole> roleManager)
         {
             _context = context;
@@ -43,7 +43,7 @@ namespace API.Security
         private async void SeedUsers()
         {
             await CreateUser(
-                new ApplicationUser()
+                new Usuario()
                 {
                     UserName = "Allan Wanderley",
                     Email = "awallan259@gmail.com",
@@ -51,7 +51,7 @@ namespace API.Security
                 }, "Pass123$", RolesModel.Product);
 
             await CreateUser(
-                new ApplicationUser()
+                new Usuario()
                 {
                     UserName = "Davi Custodio",
                     Email = "davi.demk@yahoo.com.br",
@@ -60,7 +60,7 @@ namespace API.Security
         }
 
         private async Task CreateUser(
-            ApplicationUser user,
+            Usuario user,
             string password,
             string initialRole = null)
         {

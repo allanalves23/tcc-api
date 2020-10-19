@@ -33,7 +33,7 @@ namespace API
 
             services.AddDbContext<ApiContext>();
 
-            services.AddIdentity<ApplicationUser, IdentityRole>()
+            services.AddIdentity<Usuario, IdentityRole>()
                 .AddEntityFrameworkStores<ApiContext>()
                 .AddDefaultTokenProviders();
 
@@ -56,7 +56,7 @@ namespace API
             IWebHostEnvironment env, 
             DomainContext baseContext,
             ApiContext context,
-            UserManager<ApplicationUser> userManager,
+            UserManager<Usuario> userManager,
             RoleManager<IdentityRole> roleManager
         )
         {

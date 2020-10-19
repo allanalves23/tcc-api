@@ -2,7 +2,7 @@
 
 namespace API.Security
 {
-    public class ApplicationUser : IdentityUser
+    public class Usuario : IdentityUser
     {
     }
 }

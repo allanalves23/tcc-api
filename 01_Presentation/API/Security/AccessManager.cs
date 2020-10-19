@@ -11,14 +11,14 @@ namespace API.Security
 {
     public class AccessManager
     {
-        private UserManager<ApplicationUser> _userManager;
-        private SignInManager<ApplicationUser> _signInManager;
+        private UserManager<Usuario> _userManager;
+        private SignInManager<Usuario> _signInManager;
         private SigningConfigurations _signingConfigurations;
         private TokenConfigurationsModel _tokenConfigurations;
 
         public AccessManager(
-            UserManager<ApplicationUser> userManager,
-            SignInManager<ApplicationUser> signInManager,
+            UserManager<Usuario> userManager,
+            SignInManager<Usuario> signInManager,
             SigningConfigurations signingConfigurations,
             TokenConfigurationsModel tokenConfigurations)
         {
@@ -31,7 +31,7 @@ namespace API.Security
         public async Task<CredentialModel> ValidateCredentials(UserModel user)
         {
             bool credenciaisValidas = false;
-            ApplicationUser userIdentity = null;
+            Usuario userIdentity = null;
 
             if (user != null && !String.IsNullOrWhiteSpace(user.UserID))
             {
