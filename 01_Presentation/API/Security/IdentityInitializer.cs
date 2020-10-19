@@ -1,4 +1,5 @@
 ﻿using System;
+using API.Models.Identity;
 using Microsoft.AspNetCore.Identity;
 
 namespace API.Security
@@ -23,14 +24,14 @@ namespace API.Security
         {
             if (_context.Database.EnsureCreated())
             {
-                if (!_roleManager.RoleExistsAsync(Roles.Product).Result)
+                if (!_roleManager.RoleExistsAsync(RolesModel.Product).Result)
                 {
                     var resultado = _roleManager.CreateAsync(
-                        new IdentityRole(Roles.Product)).Result;
+                        new IdentityRole(RolesModel.Product)).Result;
                     if (!resultado.Succeeded)
                     {
                         throw new Exception(
-                            $"Erro durante a criação da role {Roles.Product}.");
+                            $"Erro durante a criação da role {RolesModel.Product}.");
                     }
                 }
 
@@ -40,7 +41,7 @@ namespace API.Security
                         UserName = "awallan259@gmail.com",
                         Email = "awallan259@gmail.com",
                         EmailConfirmed = true
-                    }, "Pass123$", Roles.Product);
+                    }, "Pass123$", RolesModel.Product);
 
                 CreateUser(
                     new ApplicationUser()
@@ -48,7 +49,7 @@ namespace API.Security
                         UserName = "davi.demk@yahoo.com.br",
                         Email = "davi.demk@yahoo.com.br",
                         EmailConfirmed = true
-                    }, "Pass123$", Roles.Product);
+                    }, "Pass123$", RolesModel.Product);
             }
         }
         private void CreateUser(

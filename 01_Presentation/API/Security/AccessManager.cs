@@ -44,7 +44,7 @@ namespace API.Security
                     );
 
                     if (resultadoLogin.Succeeded)
-                        credenciaisValidas = await _userManager.IsInRoleAsync(userIdentity, Roles.Product);
+                        credenciaisValidas = await _userManager.IsInRoleAsync(userIdentity, RolesModel.Product);
                 }
             }
 
