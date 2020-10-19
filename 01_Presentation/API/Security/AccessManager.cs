@@ -2,6 +2,7 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Principal;
+using System.Threading.Tasks;
 using API.Models.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
@@ -27,28 +28,23 @@ namespace API.Security
             _tokenConfigurations = tokenConfigurations;
         }
 
-        public bool ValidateCredentials(UserModel user)
+        public async Task<bool> ValidateCredentials(UserModel user)
         {
             bool credenciaisValidas = false;
             if (user != null && !String.IsNullOrWhiteSpace(user.UserID))
             {
-                // Verifica a existência do usuário nas tabelas do
-                // ASP.NET Core Identity
-                var userIdentity = _userManager
-                    .FindByNameAsync(user.UserID).Result;
+                ApplicationUser userIdentity = await _userManager.FindByNameAsync(user.UserID);
+
                 if (userIdentity != null)
                 {
-                    // Efetua o login com base no Id do usuário e sua senha
-                    var resultadoLogin = _signInManager
-                        .CheckPasswordSignInAsync(userIdentity, user.Password, false)
-                        .Result;
+                    SignInResult resultadoLogin = await _signInManager.CheckPasswordSignInAsync(
+                        userIdentity, 
+                        user.Password, 
+                        false
+                    );
+
                     if (resultadoLogin.Succeeded)
-                    {
-                        // Verifica se o usuário em questão possui
-                        // a role Acesso-APIProdutos
-                        credenciaisValidas = _userManager.IsInRoleAsync(
-                            userIdentity, Roles.ROLE_API_PRODUTOS).Result;
-                    }
+                        credenciaisValidas = await _userManager.IsInRoleAsync(userIdentity, Roles.Product);
                 }
             }
 

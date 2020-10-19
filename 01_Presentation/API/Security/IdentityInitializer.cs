@@ -23,32 +23,32 @@ namespace API.Security
         {
             if (_context.Database.EnsureCreated())
             {
-                if (!_roleManager.RoleExistsAsync(Roles.ROLE_API_PRODUTOS).Result)
+                if (!_roleManager.RoleExistsAsync(Roles.Product).Result)
                 {
                     var resultado = _roleManager.CreateAsync(
-                        new IdentityRole(Roles.ROLE_API_PRODUTOS)).Result;
+                        new IdentityRole(Roles.Product)).Result;
                     if (!resultado.Succeeded)
                     {
                         throw new Exception(
-                            $"Erro durante a criação da role {Roles.ROLE_API_PRODUTOS}.");
+                            $"Erro durante a criação da role {Roles.Product}.");
                     }
                 }
 
                 CreateUser(
                     new ApplicationUser()
                     {
-                        UserName = "admin_apiprodutos",
-                        Email = "admin-apiprodutos@teste.com.br",
+                        UserName = "awallan259@gmail.com",
+                        Email = "awallan259@gmail.com",
                         EmailConfirmed = true
-                    }, "AdminAPIProdutos01!", Roles.ROLE_API_PRODUTOS);
+                    }, "Pass123$", Roles.Product);
 
                 CreateUser(
                     new ApplicationUser()
                     {
-                        UserName = "usrinvalido_apiprodutos",
-                        Email = "usrinvalido-apiprodutos@teste.com.br",
+                        UserName = "davi.demk@yahoo.com.br",
+                        Email = "davi.demk@yahoo.com.br",
                         EmailConfirmed = true
-                    }, "UsrInvAPIProdutos01!");
+                    }, "Pass123$", Roles.Product);
             }
         }
         private void CreateUser(
