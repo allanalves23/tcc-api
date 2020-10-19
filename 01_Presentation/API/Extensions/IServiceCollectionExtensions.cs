@@ -10,5 +10,19 @@ namespace API.Extensions
 
         public static void UseMyPolicies(this IServiceCollection services) =>
             Policies.Bootstrap.Configure(services);
+
+        public static void UseMyCors(this IServiceCollection services, IConfiguration configuration) =>
+            services.AddCors(options =>
+                options.AddPolicy(
+                    "AllowedOrigins",
+                    builder =>
+                        builder
+                            .AllowAnyHeader()
+                            .AllowAnyMethod()
+                            .WithOrigins(configuration["Origins"].Split(";"))
+                            .SetIsOriginAllowedToAllowWildcardSubdomains()
+                            .AllowCredentials()
+                )
+            );
     }
 }

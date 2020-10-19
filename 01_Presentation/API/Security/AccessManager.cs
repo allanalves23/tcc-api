@@ -81,7 +81,8 @@ namespace API.Security
             return new TokenModel(
                 dataCriacao.ToString("yyyy-MM-dd HH:mm:ss"),
                 dataExpiracao.ToString("yyyy-MM-dd HH:mm:ss"),
-                handler.WriteToken(securityToken)
+                handler.WriteToken(securityToken),
+                user
             );
         }
     }

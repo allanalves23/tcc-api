@@ -46,6 +46,8 @@ namespace API
             services.AddJwtSecurity(signingConfigurations, tokenConfigurations);
 
             services.UseMyPolicies();
+
+            services.UseMyCors(Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -72,6 +74,8 @@ namespace API
             baseContext.Database.Migrate();
 
             app.UseMyMiddlewares();
+
+            app.UseCors("AllowedOrigins");
 
             app.UseEndpoints(endpoints =>
             {

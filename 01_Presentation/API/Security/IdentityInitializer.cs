@@ -45,7 +45,7 @@ namespace API.Security
             await CreateUser(
                 new ApplicationUser()
                 {
-                    UserName = "awallan259@gmail.com",
+                    UserName = "Allan Wanderley",
                     Email = "awallan259@gmail.com",
                     EmailConfirmed = true
                 }, "Pass123$", RolesModel.Product);
@@ -53,7 +53,7 @@ namespace API.Security
             await CreateUser(
                 new ApplicationUser()
                 {
-                    UserName = "davi.demk@yahoo.com.br",
+                    UserName = "Davi Custodio",
                     Email = "davi.demk@yahoo.com.br",
                     EmailConfirmed = true
                 }, "Pass123$", RolesModel.Product);
