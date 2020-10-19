@@ -1,3 +1,4 @@
+using System;
 using API.Security;
 using Core.Interfaces.Repository;
 using Core.Interfaces.Services;
@@ -17,24 +18,30 @@ namespace _02_DependencyInjection
 
         public static void Configure(IServiceCollection services, IConfiguration configuration)
         {
-            services.AddDbContext<BaseContext>(options => 
-            {
-                options.UseMySql(configuration.GetConnectionString("DefaultConnection"));
-                options.UseLoggerFactory(MyLoggerFactory);
-                options.EnableSensitiveDataLogging();
-                options.UseLazyLoadingProxies();
-            });
+            services.AddDbContext<BaseContext>(
+                DbContextOptions(configuration.GetConnectionString("DomainConnection"))
+            );
 
-            services.AddDbContext<ApplicationDbContext>(options =>
-            {
-                options.UseMySql(configuration.GetConnectionString("DefaultConnection"));
-            });
+            services.AddDbContext<ApplicationDbContext>(
+                DbContextOptions(configuration.GetConnectionString("ApiConnection"))
+            );
 
             services.AddTransient<IUnitOfWork, UnitOfWork>();
             services.AddTransient<IArtigoService, ArtigoService>();
             services.AddTransient<IAutorService, AutorService>();
             services.AddTransient<ITemaService, TemaService>();
             services.AddTransient<ICategoriaService, CategoriaService>();
+        }
+
+        private static Action<DbContextOptionsBuilder> DbContextOptions(string connectionString)
+        {
+            return new Action<DbContextOptionsBuilder>(options => 
+            {
+                options.UseMySql(connectionString);
+                options.UseLoggerFactory(MyLoggerFactory);
+                options.EnableSensitiveDataLogging();
+                options.UseLazyLoadingProxies();
+            });
         }
     }
 }
