@@ -1,3 +1,4 @@
+using API.Security;
 using Core.Interfaces.Repository;
 using Core.Interfaces.Services;
 using Microsoft.EntityFrameworkCore;
@@ -22,6 +23,11 @@ namespace _02_DependencyInjection
                 options.UseLoggerFactory(MyLoggerFactory);
                 options.EnableSensitiveDataLogging();
                 options.UseLazyLoadingProxies();
+            });
+
+            services.AddDbContext<ApplicationDbContext>(options =>
+            {
+                options.UseMySql(configuration.GetConnectionString("DefaultConnection"));
             });
 
             services.AddTransient<IUnitOfWork, UnitOfWork>();

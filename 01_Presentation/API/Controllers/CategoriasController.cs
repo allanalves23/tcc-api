@@ -2,11 +2,12 @@ using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Core.Interfaces.Services;
 using API.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace API.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("[controller]"), Authorize("Bearer")]
     public class CategoriasController : ControllerBase
     {
         public ICategoriaService _categoriaService;
