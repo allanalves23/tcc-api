@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 namespace API.Controllers
 {
     [ApiController]
-    [Route("[controller]"), Authorize("Bearer")]
+    [Route("[controller]"), Authorize]
     public class CategoriasController : ControllerBase
     {
         public ICategoriaService _categoriaService;

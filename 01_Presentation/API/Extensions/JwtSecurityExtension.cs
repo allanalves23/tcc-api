@@ -29,11 +29,11 @@ namespace API.Extensions
                 paramsValidation.ClockSkew = TimeSpan.Zero;
             });
 
-            services.AddAuthorization(option =>
+            services.AddAuthorization(options =>
             {
-                option.AddPolicy("Bearer", new AuthorizationPolicyBuilder()
+                options.DefaultPolicy = new AuthorizationPolicyBuilder()
                     .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme‌​)
-                    .RequireAuthenticatedUser().Build());
+                    .RequireAuthenticatedUser().Build();
             });
 
             return services;
