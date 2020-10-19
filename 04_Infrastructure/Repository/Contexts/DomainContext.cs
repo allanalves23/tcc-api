@@ -4,9 +4,9 @@ using Repository.Configurations;
 
 namespace Repository
 {
-    public class BaseContext : DbContext
+    public class DomainContext : DbContext
     {
-        public BaseContext(DbContextOptions<BaseContext> options) : base(options) { }
+        public DomainContext(DbContextOptions<DomainContext> options) : base(options) { }
 
         public DbSet<Artigo> Artigos { get; set; }
         public DbSet<Tema> Temas { get; set; }

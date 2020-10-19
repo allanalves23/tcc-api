@@ -2,17 +2,18 @@
 using System.Threading.Tasks;
 using API.Models.Identity;
 using Microsoft.AspNetCore.Identity;
+using Repository.Contexts;
 
 namespace API.Security
 {
     public class IdentityInitializer
     {
-        private readonly ApplicationDbContext _context;
+        private readonly ApiContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
 
         public IdentityInitializer(
-            ApplicationDbContext context,
+            ApiContext context,
             UserManager<ApplicationUser> userManager,
             RoleManager<IdentityRole> roleManager)
         {

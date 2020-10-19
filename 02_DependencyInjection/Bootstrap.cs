@@ -1,5 +1,4 @@
 using System;
-using API.Security;
 using Core.Interfaces.Repository;
 using Core.Interfaces.Services;
 using Microsoft.EntityFrameworkCore;
@@ -7,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Repository;
+using Repository.Contexts;
 using Services;
 
 namespace _02_DependencyInjection
@@ -18,11 +18,11 @@ namespace _02_DependencyInjection
 
         public static void Configure(IServiceCollection services, IConfiguration configuration)
         {
-            services.AddDbContext<BaseContext>(
+            services.AddDbContext<DomainContext>(
                 DbContextOptions(configuration.GetConnectionString("DomainConnection"))
             );
 
-            services.AddDbContext<ApplicationDbContext>(
+            services.AddDbContext<ApiContext>(
                 DbContextOptions(configuration.GetConnectionString("ApiConnection"))
             );
 

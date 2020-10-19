@@ -57,7 +57,7 @@ namespace Repository
             set => _categoriaRepository = value;
         }
         
-        private readonly BaseContext _context;
+        private readonly DomainContext _context;
         private string _connectionString;
 
         public string ConnectionString
@@ -71,7 +71,7 @@ namespace Repository
             set { _connectionString = value; }
         }
 
-        public UnitOfWork(BaseContext context) => _context = context;
+        public UnitOfWork(DomainContext context) => _context = context;
 
         public IRepository<T> GetRepository<T>() where T : class =>
             typeof(T) switch {

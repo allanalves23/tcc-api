@@ -10,6 +10,7 @@ using API.Extensions;
 using API.Models.Identity;
 using API.Security;
 using Repository;
+using Repository.Contexts;
 
 namespace API
 {
@@ -31,10 +32,10 @@ namespace API
             services.AddControllers();
             services.UseMyServices(Configuration);
 
-            services.AddDbContext<ApplicationDbContext>();
+            services.AddDbContext<ApiContext>();
 
             services.AddIdentity<ApplicationUser, IdentityRole>()
-                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddEntityFrameworkStores<ApiContext>()
                 .AddDefaultTokenProviders();
 
             services.AddScoped<AccessManager>();
@@ -56,8 +57,8 @@ namespace API
         public void Configure(
             IApplicationBuilder app, 
             IWebHostEnvironment env, 
-            BaseContext baseContext,
-            ApplicationDbContext context,
+            DomainContext baseContext,
+            ApiContext context,
             UserManager<ApplicationUser> userManager,
             RoleManager<IdentityRole> roleManager
         )
@@ -71,8 +72,7 @@ namespace API
 
             app.UseAuthorization();
 
-            new IdentityInitializer(context, userManager, roleManager)
-                .Initialize();
+            new IdentityInitializer(context, userManager, roleManager).Initialize();
 
             baseContext.Database.Migrate();
 
