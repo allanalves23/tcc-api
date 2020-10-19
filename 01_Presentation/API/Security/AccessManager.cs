@@ -2,6 +2,7 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Principal;
+using API.Models.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 
@@ -26,7 +27,7 @@ namespace API.Security
             _tokenConfigurations = tokenConfigurations;
         }
 
-        public bool ValidateCredentials(User user)
+        public bool ValidateCredentials(UserModel user)
         {
             bool credenciaisValidas = false;
             if (user != null && !String.IsNullOrWhiteSpace(user.UserID))
@@ -54,7 +55,7 @@ namespace API.Security
             return credenciaisValidas;
         }
 
-        public Token GenerateToken(User user)
+        public TokenModel GenerateToken(UserModel user)
         {
             ClaimsIdentity identity = new ClaimsIdentity(
                 new GenericIdentity(user.UserID, "Login"),
@@ -68,25 +69,23 @@ namespace API.Security
             DateTime dataExpiracao = dataCriacao.AddMinutes(_tokenConfigurations.Minutes);
 
             var handler = new JwtSecurityTokenHandler();
-            var securityToken = handler.CreateToken(new SecurityTokenDescriptor
-            {
-                Issuer = _tokenConfigurations.Issuer,
-                Audience = _tokenConfigurations.Audience,
-                SigningCredentials = _signingConfigurations.SigningCredentials,
-                Subject = identity,
-                NotBefore = dataCriacao,
-                Expires = dataExpiracao
-            });
-            var token = handler.WriteToken(securityToken);
+            
+            SecurityToken securityToken = handler.CreateToken(
+                new SecurityTokenDescriptor
+                    {
+                        Issuer = _tokenConfigurations.Issuer,
+                        Audience = _tokenConfigurations.Audience,
+                        SigningCredentials = _signingConfigurations.SigningCredentials,
+                        Subject = identity,
+                        NotBefore = dataCriacao,
+                        Expires = dataExpiracao
+                    });
 
-            return new Token()
-            {
-                Authenticated = true,
-                Created = dataCriacao.ToString("yyyy-MM-dd HH:mm:ss"),
-                Expiration = dataExpiracao.ToString("yyyy-MM-dd HH:mm:ss"),
-                AccessToken = token,
-                Message = "OK"
-            };
+            return new TokenModel(
+                dataCriacao.ToString("yyyy-MM-dd HH:mm:ss"),
+                dataExpiracao.ToString("yyyy-MM-dd HH:mm:ss"),
+                handler.WriteToken(securityToken)
+            );
         }
     }
 }

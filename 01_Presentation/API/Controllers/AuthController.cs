@@ -1,8 +1,6 @@
-using System.Linq;
 using Microsoft.AspNetCore.Mvc;
-using Core.Interfaces.Services;
-using API.Models;
 using API.Security;
+using API.Models.Identity;
 
 namespace API.Controllers
 {
@@ -11,7 +9,7 @@ namespace API.Controllers
     public class AuthController : ControllerBase
     {
         [HttpPost]
-        public IActionResult Login([FromBody] User user, [FromServices]AccessManager accessManager)
+        public IActionResult Login([FromBody] UserModel user, [FromServices]AccessManager accessManager)
         {
             if (accessManager.ValidateCredentials(user))
             {
@@ -19,10 +17,9 @@ namespace API.Controllers
             }
             else
             {
-                return BadRequest(new
+                return Unauthorized(new
                 {
-                    Authenticated = false,
-                    Message = "Falha ao autenticar"
+                    Error = "Acesso não autorizado"
                 });
             }
         }
