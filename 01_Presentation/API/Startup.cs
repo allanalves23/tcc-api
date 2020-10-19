@@ -5,7 +5,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Options;
 using API.Extensions;
 using API.Models.Identity;
 using API.Security;
@@ -40,17 +39,13 @@ namespace API
 
             services.AddScoped<AccessManager>();
 
-            var signingConfigurations = new SigningConfigurations();
-            services.AddSingleton(signingConfigurations);
-
-            var tokenConfigurations = new TokenConfigurationsModel();
-            new ConfigureFromConfigurationOptions<TokenConfigurationsModel>(
-                Configuration.GetSection("TokenConfigurations"))
-                    .Configure(tokenConfigurations);
+            TokenConfigurationsModel tokenConfigurations = services.AddTokenSettings(Configuration);
             services.AddSingleton(tokenConfigurations);
 
-            services.AddJwtSecurity(
-                signingConfigurations, tokenConfigurations);
+            SigningConfigurations signingConfigurations = services.AddSigningSettings();
+            services.AddJwtSecurity(signingConfigurations, tokenConfigurations);
+
+            services.UseMyPolicies();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
