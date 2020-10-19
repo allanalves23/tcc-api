@@ -11,9 +11,11 @@ namespace API.Controllers
         [HttpPost]
         public IActionResult Login([FromBody] UserModel user, [FromServices]AccessManager accessManager)
         {
-            if (accessManager.ValidateCredentials(user).Result)
+            CredentialModel credenciais = accessManager.ValidateCredentials(user).Result;
+
+            if (credenciais.IsOk)
             {
-                return Ok(accessManager.GenerateToken(user));
+                return Ok(accessManager.GenerateToken(credenciais.User));
             }
             else
             {

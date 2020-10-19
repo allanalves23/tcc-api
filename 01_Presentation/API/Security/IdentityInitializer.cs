@@ -21,14 +21,14 @@ namespace API.Security
             _roleManager = roleManager;
         }
 
-        public async Task Initialize()
+        public void Initialize()
         {
             if (_context.Database.EnsureCreated())
             {
-                if (!await _roleManager.RoleExistsAsync(RolesModel.Product))
+                if (!_roleManager.RoleExistsAsync(RolesModel.Product).Result)
                 {
-                    IdentityResult resultado = await _roleManager.CreateAsync(
-                        new IdentityRole(RolesModel.Product));
+                    IdentityResult resultado = _roleManager.CreateAsync(
+                        new IdentityRole(RolesModel.Product)).Result;
 
                     if (!resultado.Succeeded)
                         throw new Exception(
@@ -36,19 +36,6 @@ namespace API.Security
                 }
 
                 SeedUsers();
-            }
-        }
-        private async Task CreateUser(
-            ApplicationUser user,
-            string password,
-            string initialRole = null)
-        {
-            if (await _userManager.FindByNameAsync(user.UserName) == null)
-            {
-                IdentityResult resultado = await _userManager.CreateAsync(user, password);
-
-                if (resultado.Succeeded && !String.IsNullOrWhiteSpace(initialRole))
-                    _userManager.AddToRoleAsync(user, initialRole).Wait();
             }
         }
 
@@ -69,6 +56,20 @@ namespace API.Security
                     Email = "davi.demk@yahoo.com.br",
                     EmailConfirmed = true
                 }, "Pass123$", RolesModel.Product);
+        }
+
+        private async Task CreateUser(
+            ApplicationUser user,
+            string password,
+            string initialRole = null)
+        {
+            if (await _userManager.FindByNameAsync(user.UserName) == null)
+            {
+                IdentityResult resultado = await _userManager.CreateAsync(user, password);
+
+                if (resultado.Succeeded && !String.IsNullOrWhiteSpace(initialRole))
+                    _userManager.AddToRoleAsync(user, initialRole).Wait();
+            }
         }
     }
 }

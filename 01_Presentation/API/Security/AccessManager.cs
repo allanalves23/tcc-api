@@ -1,7 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using System.Security.Principal;
 using System.Threading.Tasks;
 using API.Models.Identity;
 using Microsoft.AspNetCore.Identity;
@@ -28,12 +28,14 @@ namespace API.Security
             _tokenConfigurations = tokenConfigurations;
         }
 
-        public async Task<bool> ValidateCredentials(UserModel user)
+        public async Task<CredentialModel> ValidateCredentials(UserModel user)
         {
             bool credenciaisValidas = false;
+            ApplicationUser userIdentity = null;
+
             if (user != null && !String.IsNullOrWhiteSpace(user.UserID))
             {
-                ApplicationUser userIdentity = await _userManager.FindByNameAsync(user.UserID);
+                userIdentity = await _userManager.FindByEmailAsync(user.UserID);
 
                 if (userIdentity != null)
                 {
@@ -48,16 +50,15 @@ namespace API.Security
                 }
             }
 
-            return credenciaisValidas;
+            return new CredentialModel(credenciaisValidas, new UserModel(userIdentity.Email, userIdentity.UserName));
         }
 
         public TokenModel GenerateToken(UserModel user)
         {
             ClaimsIdentity identity = new ClaimsIdentity(
-                new GenericIdentity(user.UserID, "Login"),
-                new[] {
-                        new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString("N")),
-                        new Claim(JwtRegisteredClaimNames.UniqueName, user.UserID)
+                new List<Claim> {
+                    new Claim("userID", user.UserID),
+                    new Claim("userName", user.UserName)
                 }
             );
 
