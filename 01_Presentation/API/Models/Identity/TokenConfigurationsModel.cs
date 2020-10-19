@@ -1,6 +1,6 @@
-namespace API.Security
+namespace API.Models.Identity
 {
-    public class TokenConfigurations
+    public class TokenConfigurationsModel
     {
         public string Audience { get; set; }
         public string Issuer { get; set; }

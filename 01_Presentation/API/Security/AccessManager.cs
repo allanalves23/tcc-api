@@ -14,13 +14,13 @@ namespace API.Security
         private UserManager<ApplicationUser> _userManager;
         private SignInManager<ApplicationUser> _signInManager;
         private SigningConfigurations _signingConfigurations;
-        private TokenConfigurations _tokenConfigurations;
+        private TokenConfigurationsModel _tokenConfigurations;
 
         public AccessManager(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             SigningConfigurations signingConfigurations,
-            TokenConfigurations tokenConfigurations)
+            TokenConfigurationsModel tokenConfigurations)
         {
             _userManager = userManager;
             _signInManager = signInManager;

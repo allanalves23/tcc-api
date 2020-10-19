@@ -1,5 +1,3 @@
-using API.Extensions;
-using API.Security;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -8,6 +6,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
+using API.Extensions;
+using API.Models.Identity;
+using API.Security;
 using Repository;
 
 namespace API
@@ -30,32 +31,23 @@ namespace API
             services.AddControllers();
             services.UseMyServices(Configuration);
 
-            // Configurando o uso da classe de contexto para
-            // acesso às tabelas do ASP.NET Identity Core
             services.AddDbContext<ApplicationDbContext>();
 
-            // Ativando a utilização do ASP.NET Identity, a fim de
-            // permitir a recuperação de seus objetos via injeção de
-            // dependências
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
-            // Configurando a dependência para a classe de validação
-            // de credenciais e geração de tokens
             services.AddScoped<AccessManager>();
 
             var signingConfigurations = new SigningConfigurations();
             services.AddSingleton(signingConfigurations);
 
-            var tokenConfigurations = new TokenConfigurations();
-            new ConfigureFromConfigurationOptions<TokenConfigurations>(
+            var tokenConfigurations = new TokenConfigurationsModel();
+            new ConfigureFromConfigurationOptions<TokenConfigurationsModel>(
                 Configuration.GetSection("TokenConfigurations"))
                     .Configure(tokenConfigurations);
             services.AddSingleton(tokenConfigurations);
 
-            // Aciona a extensão que irá configurar o uso de
-            // autenticação e autorização via tokens
             services.AddJwtSecurity(
                 signingConfigurations, tokenConfigurations);
         }
@@ -79,9 +71,6 @@ namespace API
 
             app.UseAuthorization();
 
-            // Criação de estruturas, usuários e permissões
-            // na base do ASP.NET Identity Core (caso ainda não
-            // existam)
             new IdentityInitializer(context, userManager, roleManager)
                 .Initialize();
 
