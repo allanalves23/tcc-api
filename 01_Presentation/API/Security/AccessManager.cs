@@ -33,7 +33,9 @@ namespace API.Security
             bool credenciaisValidas = false;
             Usuario userIdentity = null;
 
-            if (user != null && !String.IsNullOrWhiteSpace(user.UserID))
+            user.Validate();
+
+            if (user != null)
             {
                 userIdentity = await _userManager.FindByEmailAsync(user.UserID);
 
@@ -47,8 +49,10 @@ namespace API.Security
 
                     if (resultadoLogin.Succeeded)
                         credenciaisValidas = await _userManager.IsInRoleAsync(userIdentity, RolesModel.Product);
-                }
-            }
+                } else
+                    throw new UnauthorizedAccessException("E-mail ou senha inválidos");
+            } else
+                throw new InvalidOperationException("Ocorreu um erro desconhecido, se persistir reporte");
 
             return new CredentialModel(credenciaisValidas, new UserModel(userIdentity.Email, userIdentity.UserName));
         }

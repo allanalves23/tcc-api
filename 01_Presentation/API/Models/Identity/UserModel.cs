@@ -1,3 +1,5 @@
+using System;
+
 namespace API.Models.Identity
 {
     public class UserModel
@@ -13,6 +15,15 @@ namespace API.Models.Identity
             UserID = userID;
             UserName = userName;
             Password = password;
+        }
+
+        public void Validate()
+        {
+            if(string.IsNullOrEmpty(UserID))
+                throw new UnauthorizedAccessException("É necessário informar o e-mail");
+
+            if(string.IsNullOrEmpty(Password))
+                throw new UnauthorizedAccessException("É necessário informar a senha");
         }
     }
 }
