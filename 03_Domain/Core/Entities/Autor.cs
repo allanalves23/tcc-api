@@ -10,10 +10,20 @@ namespace Core.Entities
         public string Nome { get; set; }
         public string Email { get; set; }
         public virtual IEnumerable<Artigo> Artigos { get; set; }
+        public string UsuarioId { get; set; }
         public Genero Genero { get; set; }
         public DateTime DataCadastro { get; set; }
         public DateTime? DataAtualizacao { get; set; }
         public DateTime? DataRemocao { get; set; }
+
+        public Autor() { }
+
+        public Autor(Usuario usuario) {
+            Nome = usuario.UserName;
+            Email = usuario.Email;
+            UsuarioId = usuario.Id;
+            DataCadastro = DateTime.Now;
+        }
 
         public void Validar()
         {

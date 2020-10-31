@@ -23,6 +23,17 @@ namespace Core.Entities
         public DateTime? DataImpulsionamento { get; set; }
         public DateTime? DataPublicacao { get; set; }
 
+        public Artigo() { }
+
+        public Artigo(string titulo, Autor autor) { 
+            Titulo = titulo;
+            Autor = autor;
+            DataCadastro = DateTime.Now;
+            Estado = EstadoArtigo.Rascunho;
+
+            Validar();
+        }
+
         public void Validar()
         {
             if(string.IsNullOrEmpty(Titulo))
@@ -30,15 +41,73 @@ namespace Core.Entities
 
             if(Titulo.Length > 100)
                 throw new ArgumentException("Titulo do artigo deve possuir até 100 caracteres");
-
-            if(Descricao.Length > 255)
-                throw new ArgumentException("Descrição do artigo deve possuir até 255 caracteres");
         }
 
-        public void Atualizar() => DataAtualizacao = DateTime.Now;
-        public void Inativar() => DataInativacao = DateTime.Now;
-        public void Remover() => DataRemocao = DateTime.Now;
-        public void Impulsionar() => DataImpulsionamento = DateTime.Now;
+        public void ValidarParaEdicao()
+        {
+            if(!string.IsNullOrEmpty(Descricao) && Descricao.Length > 250)
+                throw new ArgumentException("Descrição do artigo deve possuir até 250 caracteres");
+        }
 
+        public void Atualizar()
+        {
+            ValidarParaEdicao();
+            DataAtualizacao = DateTime.Now;
+        }
+
+        public void Publicar()
+        {
+            if (EstaPublicado() || EstaImpulsionado())
+                throw new ArgumentException("Este Artigo já esta publicado");
+
+            DataPublicacao = DateTime.Now;
+            Estado = EstadoArtigo.Publicado;
+        }
+
+        public void Inativar()
+        {
+            if (EstaInativado())
+                throw new ArgumentException("Este Artigo já esta inativado");
+
+            if (EstaRemovido())
+                throw new ArgumentException("Não é possível inativar um artigo que foi removido");
+
+            if (!JaFoiPublicado())
+                throw new ArgumentException("Somente artigos que ja foram publicados podem ser inativados");
+
+            DataInativacao = DateTime.Now;
+            Estado = EstadoArtigo.Inativo;
+        }
+
+        public void Remover()
+        {
+            if (EstaRemovido())
+                throw new ArgumentException("Este Artigo já foi removido");
+
+            if (JaFoiPublicado())
+                throw new ArgumentException("Não é possível remover artigos que já foram publicados");
+
+            DataRemocao = DateTime.Now;
+            Estado = EstadoArtigo.Removido;
+        }
+
+        public void Impulsionar()
+        {
+            if (EstaImpulsionado())
+                throw new ArgumentException("Este Artigo já esta impulsionado");
+
+            if (!EstaPublicado())
+                throw new ArgumentException("Não é possível impulsionar artigos que não estão publicados");
+
+            DataImpulsionamento = DateTime.Now;
+            Estado = EstadoArtigo.Impulsionado;
+        }
+
+        public bool EhRascunho() => Estado == EstadoArtigo.Rascunho;
+        public bool EstaPublicado() => DataPublicacao.HasValue && Estado == EstadoArtigo.Publicado;
+        public bool EstaImpulsionado() => DataImpulsionamento.HasValue && Estado == EstadoArtigo.Impulsionado;
+        public bool EstaInativado() => DataInativacao.HasValue && Estado == EstadoArtigo.Inativo;
+        public bool EstaRemovido() => DataRemocao.HasValue && Estado == EstadoArtigo.Removido;
+        public bool JaFoiPublicado() => DataPublicacao.HasValue || DataImpulsionamento.HasValue;
     }
 }

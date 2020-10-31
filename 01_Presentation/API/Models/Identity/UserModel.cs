@@ -4,14 +4,16 @@ namespace API.Models.Identity
 {
     public class UserModel
     {
+        public string Id { get; set; }
         public string UserID { get; set; }
         public string UserName { get; set; }
         public string Password { get; set; }
 
         public UserModel() { }
 
-        public UserModel(string userID, string userName, string password = null)
+        public UserModel(string id, string userID, string userName, string password = null)
         {
+            Id = id;
             UserID = userID;
             UserName = userName;
             Password = password;

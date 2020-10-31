@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -55,13 +55,14 @@ namespace API.Security
             } else
                 throw new InvalidOperationException("Ocorreu um erro desconhecido, se persistir reporte");
 
-            return new CredentialModel(credenciaisValidas, new UserModel(userIdentity.Email, userIdentity.UserName));
+            return new CredentialModel(credenciaisValidas, new UserModel(userIdentity.Id, userIdentity.Email, userIdentity.UserName));
         }
 
         public TokenModel GenerateToken(UserModel user)
         {
             ClaimsIdentity identity = new ClaimsIdentity(
                 new List<Claim> {
+                    new Claim("id", user.Id),
                     new Claim("userID", user.UserID),
                     new Claim("userName", user.UserName)
                 }
