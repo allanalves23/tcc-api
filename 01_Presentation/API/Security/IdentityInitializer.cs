@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using API.Models.Identity;
+using Core.Entities;
 using Microsoft.AspNetCore.Identity;
 using Repository.Contexts;
 

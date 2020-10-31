@@ -10,6 +10,7 @@ using API.Models.Identity;
 using API.Security;
 using Repository;
 using Repository.Contexts;
+using Core.Entities;
 
 namespace API
 {

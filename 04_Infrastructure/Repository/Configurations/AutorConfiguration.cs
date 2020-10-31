@@ -12,7 +12,6 @@ namespace Repository.Configurations
 
             builder.Property(item => item.Nome).HasMaxLength(255).IsRequired();
             builder.Property(item => item.Email).HasMaxLength(255).IsRequired();
-            builder.Property(item => item.Senha).HasMaxLength(255).IsRequired();
 
             builder.Ignore(item => item.Artigos);
             builder.ToTable("Autores");
