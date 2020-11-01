@@ -40,9 +40,9 @@ namespace API.Controllers
         public IActionResult RemoverArtigo(int id) =>
             Ok(new ArtigoModel(_artigoService.Remover(id)));
 
-        [HttpPatch("{id:int}/temas/{idTema:int}/categorias/{idCategoria:int}")]
-        public IActionResult UpdateTemaCategoriaArtigo(int id, int idTema, int idCategoria) =>
-            Ok(new ArtigoModel(_artigoService.Atualizar(id, idTema, idCategoria)));
+        [HttpPut("{id:int}/temas/categorias")]  
+        public IActionResult UpdateTemaCategoriaArtigo(int id, [FromBody] ArtigoModel artigo) =>
+            Ok(new ArtigoModel(_artigoService.Atualizar(id, artigo?.Tema?.Id, artigo?.Categoria?.Id)));
 
         [HttpPut("{id:int}/publicacoes")]
         public IActionResult PublicarArtigo(int id) =>
