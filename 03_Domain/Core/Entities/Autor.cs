@@ -42,7 +42,15 @@ namespace Core.Entities
                 throw new ArgumentException("Endereço de e-mail inválido");
         }
 
-        public void Atualizar() => DataAtualizacao = DateTime.Now;
+        public void Atualizar(string nome, string email, string genero)
+        {
+            Nome = nome;
+            Email = email;
+            Genero = (Genero) Enum.Parse(typeof(Genero), genero);
+
+            Validar();
+            DataAtualizacao = DateTime.Now;
+        }
 
         public void Remover() => DataRemocao = DateTime.Now;
     }

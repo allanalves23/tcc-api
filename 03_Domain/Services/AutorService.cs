@@ -17,7 +17,8 @@ namespace Services
 
         public Autor Obter(string idUsuario) => Obter(item => item.UsuarioId == idUsuario);
 
-        public Autor Obter(int? idAutor) => Obter(item => item.Id == idAutor);
+        public Autor Obter(int? idAutor) => Obter(item => item.Id == idAutor)
+            ?? throw new ArgumentNullException("Autor não encontrado");
 
         public Autor Criar(string idUsuario)
         {
@@ -28,6 +29,19 @@ namespace Services
             autor.Validar();
 
             Adicionar(autor);
+            Salvar();
+
+            return autor;
+        }
+
+        public Autor Atualizar(int? id, string nome, string email, string genero)
+        {
+            if (!id.HasValue)
+                throw new ArgumentException("É necessário informar o autor");
+
+            Autor autor = Obter(id);
+            autor.Atualizar(nome, email, genero);
+
             Salvar();
 
             return autor;
