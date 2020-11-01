@@ -21,6 +21,10 @@ namespace API.Controllers
         public IActionResult GetCategorias(string termo, int? skip = 0, int? take = 10) => 
             Ok(_categoriaService.Obter(termo, skip, take).Select(item => new CategoriaModel(item)));
 
+        [HttpGet("temas/{temaId:int}")]
+        public IActionResult GetCategoriasPorTema(string termo, int temaId, int? skip = 0, int? take = 10) => 
+            Ok(_categoriaService.Obter(termo, temaId, skip, take).Select(item => new CategoriaModel(item)));
+
         [HttpGet("{id:int}")]
         public IActionResult GetCategoria(int id) => Ok(new CategoriaModel(_categoriaService.Obter(id)));
 
