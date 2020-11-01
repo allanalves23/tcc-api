@@ -13,7 +13,7 @@ namespace Services
 
         public IEnumerable<Tema> Obter(string termo, int? skip, int? take) => 
             Obter(
-                item => (string.IsNullOrEmpty(termo) || item.Nome.StartsWith(termo)) && !item.DataRemocao.HasValue,
+                item => (string.IsNullOrEmpty(termo) || item.Nome.ToUpper().StartsWith(termo.ToUpper())) && !item.DataRemocao.HasValue,
                 skip, 
                 take
             );
