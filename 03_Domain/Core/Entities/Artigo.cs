@@ -85,6 +85,20 @@ namespace Core.Entities
             DataAtualizacao = DateTime.Now;
         }
 
+        public void RemoverTema()
+        {
+            Tema = null;
+            TemaId = null;
+            RemoverCategoria();
+        }
+
+        public void RemoverCategoria()
+        {
+            Categoria = null;
+            CategoriaId = null;
+            DataAtualizacao = DateTime.Now;
+        }
+
         public void AplicarCategoria(Categoria categoria)
         {
             if (categoria == null)

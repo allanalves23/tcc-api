@@ -60,10 +60,7 @@ namespace Services
         public Artigo Atualizar(int? id, int? temaId, int? categoriaId)
         {
             Artigo artigo = DefinirTema(id, temaId);
-
-            if (categoriaId.HasValue)
-                artigo = DefinirCategoria(id, categoriaId);
-
+            artigo = DefinirCategoria(id, categoriaId);
             return artigo;
         }
 
@@ -83,9 +80,14 @@ namespace Services
         private Artigo DefinirTema(int? artigoId, int? temaId)
         {
             Artigo artigo = Obter(artigoId);
-            Tema tema = _temaService.Obter(temaId);
 
-            artigo.AplicarTema(tema);
+            if (temaId.HasValue)
+            {
+                Tema tema = _temaService.Obter(temaId);
+                artigo.AplicarTema(tema);
+            } else {
+                artigo.RemoverTema();
+            }
 
             Salvar();
             return artigo;
@@ -94,9 +96,14 @@ namespace Services
         private Artigo DefinirCategoria(int? artigoId, int? categoriaId)
         {
             Artigo artigo = Obter(artigoId);
-            Categoria categoria = _categoriaService.Obter(categoriaId);
-
-            artigo.AplicarCategoria(categoria);
+            
+            if (categoriaId.HasValue)
+            {
+                Categoria categoria = _categoriaService.Obter(categoriaId);
+                artigo.AplicarCategoria(categoria);
+            } else {
+                artigo.RemoverCategoria();
+            }
 
             Salvar();
             return artigo;
