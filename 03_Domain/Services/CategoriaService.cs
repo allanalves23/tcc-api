@@ -18,7 +18,7 @@ namespace Services
 
         public IEnumerable<Categoria> Obter(string termo, int? skip, int? take) => 
             Obter(
-                item => (string.IsNullOrEmpty(termo) || item.Nome.StartsWith(termo)) && !item.DataRemocao.HasValue,
+                item => (string.IsNullOrEmpty(termo) || item.Nome.ToUpper().StartsWith(termo.ToUpper())) && !item.DataRemocao.HasValue,
                 skip, 
                 take
             );
@@ -26,6 +26,18 @@ namespace Services
         public Categoria Obter(int? idCategoria) =>
             Obter(item => item.Id == idCategoria.Value && !item.DataRemocao.HasValue) 
                 ?? throw new ArgumentNullException("Categoria não encontrada");
+
+        public IEnumerable<Categoria> Obter(string termo, int temaId, int? skip, int? take)
+        {
+            if (!_temaService.Existe(item => item.Id == temaId && !item.EstaRemovido()))
+                throw new ArgumentException("Tema não encontrado");
+
+            return Obter(
+                item => (string.IsNullOrEmpty(termo) || item.Nome.ToUpper().StartsWith(termo.ToUpper())) && !item.DataRemocao.HasValue && item.TemaId == temaId,
+                skip, 
+                take
+            );
+        }
 
         public Categoria Criar(string nome, string descricao, int? idTema)
         {
