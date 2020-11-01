@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Core.Entities
 {
@@ -9,6 +10,7 @@ namespace Core.Entities
         public string Nome { get; set; }
         public string Descricao { get; set; }
         public virtual IEnumerable<Artigo> Artigos { get; set; }
+        public virtual IEnumerable<Categoria> Categorias { get; set; }
         public DateTime DataCadastro { get; set; }
         public DateTime? DataAtualizacao { get; set; }
         public DateTime? DataRemocao { get; set; }
@@ -21,6 +23,8 @@ namespace Core.Entities
             Descricao = descricao;
             DataCadastro = DateTime.Now;
         }
+
+        public bool PertenceACategoria(Categoria categoria) => Categorias.Any(item => item.Id == categoria.Id);
 
         public void Validar()
         {

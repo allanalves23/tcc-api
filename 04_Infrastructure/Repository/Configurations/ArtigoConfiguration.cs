@@ -14,6 +14,9 @@ namespace Repository.Configurations
             builder.Property(item => item.Descricao).HasMaxLength(255);
             builder.Property(item => item.Conteudo).HasColumnType("longtext");
 
+            builder.Property(item => item.UrlPersonalizada).IsRequired();
+            builder.HasIndex(item => item.UrlPersonalizada).IsUnique();
+
             builder
                 .HasOne(item => item.Autor)
                 .WithMany(item => item.Artigos)

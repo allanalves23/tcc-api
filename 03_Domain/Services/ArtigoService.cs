@@ -4,6 +4,7 @@ using Core.Interfaces.Repository;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
+using Core.Enums;
 
 namespace Services
 {
@@ -11,14 +12,20 @@ namespace Services
     {
         private UserManager<Usuario> _userManager;
         private IAutorService _autorService;
+        private ITemaService _temaService;
+        private ICategoriaService _categoriaService;
 
         public ArtigoService(
             IUnitOfWork unitOfWork,
             UserManager<Usuario> userManager,
-            IAutorService autorService
+            IAutorService autorService,
+            ITemaService temaService,
+            ICategoriaService categoriaService
         ) : base(unitOfWork) { 
             _userManager = userManager;
             _autorService = autorService;
+            _temaService = temaService;
+            _categoriaService = categoriaService;
         }
 
         public Artigo Criar(string titulo, string idUsuario)
@@ -36,8 +43,71 @@ namespace Services
             return artigo;
         }
 
+        public Artigo Atualizar(int? id, string titulo, string descricao, string conteudo)
+        {
+            if (!id.HasValue)
+                throw new ArgumentException("É necessário informar o artigo");
+
+            Artigo artigo = Obter(id)
+                ?? throw new ArgumentNullException("Artigo não encontrado");
+
+            artigo.Atualizar(titulo, descricao, conteudo);
+
+            Salvar();
+            return artigo;
+        }
+
+        public Artigo Atualizar(int? id, int? temaId, int? categoriaId)
+        {
+            Artigo artigo = DefinirTema(id, temaId);
+
+            if (categoriaId.HasValue)
+                artigo = DefinirCategoria(id, categoriaId);
+
+            return artigo;
+        }
+
+        public Artigo Atualizar(int? id, string urlPersonalizada)
+        {
+            Artigo artigo = Obter(id);
+            
+            if (Existe(item => item.Id != id && item.UrlPersonalizada == urlPersonalizada))
+                throw new ArgumentException("Esta Url Personalizada já está definida para outro artigo");
+
+            artigo.Atualizar(urlPersonalizada);
+            Salvar();
+
+            return artigo;
+        }
+
+        private Artigo DefinirTema(int? artigoId, int? temaId)
+        {
+            Artigo artigo = Obter(artigoId);
+            Tema tema = _temaService.Obter(temaId);
+
+            artigo.AplicarTema(tema);
+
+            Salvar();
+            return artigo;
+        }
+
+        private Artigo DefinirCategoria(int? artigoId, int? categoriaId)
+        {
+            Artigo artigo = Obter(artigoId);
+            Categoria categoria = _categoriaService.Obter(categoriaId);
+
+            artigo.AplicarCategoria(categoria);
+
+            Salvar();
+            return artigo;
+        }
+
         public Artigo Obter(int? idArtigo) =>
-            Obter(item => item.Id == idArtigo)
+            Obter(item => item.Id == idArtigo && item.Estado != EstadoArtigo.Removido)
+                ?? throw new ArgumentNullException("Artigo não encontrado");
+
+        public Artigo Obter(string urlPersonalizada) =>
+            Obter(item => item.UrlPersonalizada == urlPersonalizada && item.Estado != EstadoArtigo.Removido)
                 ?? throw new ArgumentNullException("Artigo não encontrado");
 
         public Artigo Publicar(int? idArtigo)
@@ -75,10 +145,13 @@ namespace Services
         public IEnumerable<Artigo> Obter(string termo, int? skip = 0, int? take = 10) =>
             Obter(
                 item => 
-                (item.Titulo.StartsWith(termo ?? "")) 
-                || (!string.IsNullOrEmpty(item.Descricao) 
+                (item.Titulo.StartsWith(termo ?? "") 
+                || 
+                (
+                    !string.IsNullOrEmpty(item.Descricao) 
                     && item.Descricao.StartsWith(termo ?? "")
-                    ),
+                ))
+                && item.Estado != EstadoArtigo.Removido,
                 skip,
                 take
             );

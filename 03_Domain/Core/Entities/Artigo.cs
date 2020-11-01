@@ -9,6 +9,7 @@ namespace Core.Entities
         public string Titulo { get; set; }
         public string Descricao { get; set; }
         public string Conteudo { get; set; }
+        public string UrlPersonalizada { get; set; }
         public EstadoArtigo Estado { get; set; }
         public int? TemaId { get; set; }
         public virtual Tema Tema { get; set; }
@@ -30,6 +31,7 @@ namespace Core.Entities
             Autor = autor;
             DataCadastro = DateTime.Now;
             Estado = EstadoArtigo.Rascunho;
+            UrlPersonalizada = Guid.NewGuid().ToString();
 
             Validar();
         }
@@ -45,19 +47,59 @@ namespace Core.Entities
 
         public void ValidarParaEdicao()
         {
-            if(!string.IsNullOrEmpty(Descricao) && Descricao.Length > 250)
+            if (!string.IsNullOrEmpty(Descricao) && Descricao.Length > 250)
                 throw new ArgumentException("Descrição do artigo deve possuir até 250 caracteres");
         }
 
-        public void Atualizar()
+        public void Atualizar(string titulo, string descricao, string conteudo)
         {
             ValidarParaEdicao();
+
+            if (!string.IsNullOrEmpty(titulo))
+            {
+                Validar();
+                Titulo = titulo;
+            }
+
+            if (!string.IsNullOrEmpty(descricao))
+                Descricao = descricao;
+
+            Conteudo = conteudo;
+            DataAtualizacao = DateTime.Now;
+        }
+
+        public void Atualizar(string urlPersonalizada)
+        {
+            if (string.IsNullOrEmpty(urlPersonalizada))
+                throw new ArgumentException("É necessário informar a Url Personalizada");
+
+            UrlPersonalizada = urlPersonalizada;
+        }
+
+        public void AplicarTema(Tema tema)
+        {
+            if (tema == null)
+                throw new ArgumentException("Tema não definido");
+
+            Tema = tema;
+            DataAtualizacao = DateTime.Now;
+        }
+
+        public void AplicarCategoria(Categoria categoria)
+        {
+            if (categoria == null)
+                throw new ArgumentException("Categoria não definida");
+
+            if (!Tema.PertenceACategoria(categoria))
+                throw new ArgumentException("Esta Categoria não pertence a este Tema");
+
+            Categoria = categoria;
             DataAtualizacao = DateTime.Now;
         }
 
         public void Publicar()
         {
-            if (EstaPublicado() || EstaImpulsionado())
+            if (EstaPublicado())
                 throw new ArgumentException("Este Artigo já esta publicado");
 
             DataPublicacao = DateTime.Now;

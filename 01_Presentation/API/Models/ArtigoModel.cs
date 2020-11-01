@@ -10,20 +10,22 @@ namespace API.Models
         public string Descricao { get; set; }
         public string Conteudo { get; set; }
         public string Estado { get; set; }
+        public string Url { get; set; }
         public TemaModel Tema { get; set; }
         public CategoriaModel Categoria { get; set; }
         public AutorModel Autor { get; set; }
-        public DateTime DataCadastro { get; set; }
+        public DateTime? DataCadastro { get; set; }
     
         public ArtigoModel() { }
 
         public ArtigoModel(Artigo artigo) {
-            Id = artigo.Id;
-            Titulo = artigo.Titulo;
-            Descricao = artigo.Descricao;
-            Conteudo = artigo.Conteudo;
-            Estado = artigo.Estado.ToString().ToUpper();
-            DataCadastro = artigo.DataCadastro;
+            Id = artigo?.Id;
+            Titulo = artigo?.Titulo;
+            Descricao = artigo?.Descricao;
+            Conteudo = artigo?.Conteudo;
+            Estado = artigo?.Estado.ToString().ToUpper();
+            DataCadastro = artigo?.DataCadastro;
+            Url = artigo?.UrlPersonalizada;
 
             if (artigo?.Tema != null)
                 Tema = new TemaModel(artigo.Tema);
