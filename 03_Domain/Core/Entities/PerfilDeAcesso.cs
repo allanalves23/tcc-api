@@ -37,5 +37,11 @@ namespace Core.Entities
             Perfil = (TipoUsuario) Enum.Parse(typeof(TipoUsuario), perfil);
             DataAtualizacao = DateTime.Now;
         }
+
+        public void Reativar() => DataInativacao = null;
+
+        public void Desativar() => DataInativacao = DateTime.Now;
+
+        public bool EstaInativo() => DataInativacao.HasValue;
     }
 }

@@ -20,8 +20,11 @@ namespace Services
             _perfilDeAcessoService = perfilDeAcessoService;
         }
 
-        public async Task<(Usuario, PerfilDeAcesso)> Obter(string id) =>
-            (await _userManager.FindByIdAsync(id), _perfilDeAcessoService.Obter(id));
+        public async Task<(Usuario, PerfilDeAcesso)> ObterAsync(string id) =>
+            (
+                await _userManager.FindByIdAsync(id) ?? throw new ArgumentNullException("Usuario não encontrado"), 
+                _perfilDeAcessoService.Obter(id) ?? throw new ArgumentNullException("Perfil de Acesso não encontrado")
+            );
 
         public IEnumerable<(Usuario, PerfilDeAcesso)> Obter(string termo, int skip, int take) =>
             _userManager
@@ -138,13 +141,15 @@ namespace Services
 
         private async Task CriarSenhaAsync(Usuario usuario, string senha)
         {
-            if (await _userManager.HasPasswordAsync(usuario))
-                throw new ArgumentException("Este usuário já possui uma senha configurada");
+            if (await _userManager.HasPasswordAsync(usuario)) return;
 
             IdentityResult result = await _userManager.AddPasswordAsync(usuario, senha);
 
             if (!result.Succeeded)
-                throw new Exception("Ocorreu um erro ao adicionar a senha do Usuário, se persistir reporte");
+            {
+                await _userManager.DeleteAsync(usuario);
+                throw new Exception(result.Errors.FirstOrDefault().Description ?? "Ocorreu um erro ao adicionar a senha do Usuário, se persistir reporte");
+            }
         }
 
         private void ValidarParaCadastro(string email, string senha, string perfil)
@@ -178,6 +183,20 @@ namespace Services
                 throw new ArgumentException("Perfil de Acesso inválido");
         }
 
+        public void Remover(string id)
+        {
+            PerfilDeAcesso perfilDeAcesso = _perfilDeAcessoService.Obter(id);
+            perfilDeAcesso.Desativar();
+            _perfilDeAcessoService.Salvar();
+        }
+
+        public void Reativar(string id)
+        {
+            PerfilDeAcesso perfilDeAcesso = _perfilDeAcessoService.Obter(id);
+            perfilDeAcesso.Reativar();
+            _perfilDeAcessoService.Salvar();
+        }
+        
         private PerfilDeAcesso AdicionarPerfilDeAcesso(Usuario usuario, string perfil) =>
             _perfilDeAcessoService.Criar(usuario, perfil);
 

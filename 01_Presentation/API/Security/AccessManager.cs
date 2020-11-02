@@ -57,6 +57,9 @@ namespace API.Security
                     {
                         credenciaisValidas = await _userManager.IsInRoleAsync(userIdentity, RolesModel.Principal);
                         perfilDeAcesso = _perfilDeAcessoService.Obter(userIdentity.Id);
+
+                        if (perfilDeAcesso.EstaInativo())
+                            throw new UnauthorizedAccessException("Usuário inativado, entre em contato com um administrador");
                     } else
                         throw new UnauthorizedAccessException("E-mail ou senha inválidos");
                 } else

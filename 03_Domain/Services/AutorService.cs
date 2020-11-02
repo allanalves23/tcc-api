@@ -15,7 +15,15 @@ namespace Services
                 _userManager = userManager;
             }
 
-        public Autor Obter(string idUsuario) => Obter(item => item.UsuarioId == idUsuario);
+        public Autor Obter(string idUsuario, bool lancaExcecao = false)
+        {
+            Autor autor = Obter(item => item.UsuarioId == idUsuario);
+            
+            if (autor == null && lancaExcecao)
+                throw new ArgumentNullException("Autor não encontrado");
+
+            return autor;
+        }
 
         public Autor Obter(int? idAutor) => Obter(item => item.Id == idAutor)
             ?? throw new ArgumentNullException("Autor não encontrado");

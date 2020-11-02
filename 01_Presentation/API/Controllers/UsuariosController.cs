@@ -23,7 +23,7 @@ namespace API.Controllers
 
         [HttpGet("{usuarioId}")]
         public IActionResult GetUsuario(string usuarioId) => 
-            Ok(new UsuarioModel(_usuarioService.Obter(usuarioId).Result));
+            Ok(new UsuarioModel(_usuarioService.ObterAsync(usuarioId).Result));
 
         [HttpPost]
         public IActionResult CreateUsuario([FromBody] UsuarioModel usuario) => 
@@ -32,6 +32,13 @@ namespace API.Controllers
         [HttpPut("{id}")]
         public IActionResult UpdateUsuario(string id, [FromBody] UsuarioModel usuario) =>
             Ok(new UsuarioModel(_usuarioService.AtualizarAsync(id, usuario?.Email, usuario?.PerfilDeAcesso).Result));
+
+        [HttpDelete("{id}")]
+        public IActionResult RemoverUsuario(string id)
+        {
+            _usuarioService.Remover(id);
+            return NoContent();
+        }
 
         [HttpPatch("{id}")]
         public IActionResult AlterarSenha(string id, [FromBody] TrocaDeSenhaModel trocaDeSenha)
@@ -44,6 +51,13 @@ namespace API.Controllers
             ).Wait();
 
             return NoContent();
-        } 
+        }
+
+        [HttpPut("{id}/restauracoes")]
+        public IActionResult RestaurarUsuario(string id)
+        {
+            _usuarioService.Reativar(id);
+            return NoContent();
+        }
     }
 }

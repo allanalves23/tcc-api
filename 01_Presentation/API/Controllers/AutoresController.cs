@@ -18,7 +18,7 @@ namespace API.Controllers
 
         [HttpGet("{usuarioId}")]
         public IActionResult GetAutor(string usuarioId) => 
-            Ok(new AutorModel(_autorService.Obter(usuarioId)));
+            Ok(new AutorModel(_autorService.Obter(usuarioId, lancaExcecao: true)));
 
         [HttpPut("{id:int}")]
         public IActionResult UpdateAutor([FromBody] AutorModel autor, int id) =>

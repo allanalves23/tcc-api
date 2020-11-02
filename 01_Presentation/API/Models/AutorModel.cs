@@ -12,7 +12,7 @@ namespace API.Models
 
         public AutorModel() { }
 
-        public AutorModel(Autor autor) 
+        public AutorModel(Autor autor)
         {
             Id = autor?.Id;
             Nome = autor?.Nome;
