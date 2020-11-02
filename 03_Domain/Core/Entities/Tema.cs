@@ -29,13 +29,13 @@ namespace Core.Entities
         public void Validar()
         {
             if(string.IsNullOrEmpty(Nome))
-                throw new ArgumentException("É necessário informar o nome da categoria");
+                throw new ArgumentException("É necessário informar o nome do Tema");
 
             if(Nome.Length > 255)
-                throw new ArgumentException("Nome da categoria deve ter até 255 caracteres");
+                throw new ArgumentException("Nome do Tema deve ter até 255 caracteres");
 
             if(!string.IsNullOrEmpty(Descricao) && Descricao.Length > 255)
-                throw new ArgumentException("Descrição da categoria deve ter até 255 caracteres");
+                throw new ArgumentException("Descrição do Tema deve ter até 255 caracteres");
         }
 
         public void Atualizar(string nome, string descricao)
