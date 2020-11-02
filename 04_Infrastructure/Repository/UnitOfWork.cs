@@ -13,6 +13,8 @@ namespace Repository
         private IRepository<Autor> _autorRepository;
         private IRepository<Tema> _temaRepository;
         private IRepository<Categoria> _categoriaRepository;
+        private IRepository<PerfilDeAcesso> _perfilDeAcessoRepository;
+
         public IRepository<Artigo> ArtigoRepository
         {
             get
@@ -56,6 +58,17 @@ namespace Repository
             }
             set => _categoriaRepository = value;
         }
+
+        public IRepository<PerfilDeAcesso> PerfilDeAcessoRepository
+        {
+            get
+            {
+                if (_perfilDeAcessoRepository == null)
+                    _perfilDeAcessoRepository = new PerfilDeAcessoRepository(_context.PerfisDeAcesso, ConnectionString);
+                return _perfilDeAcessoRepository;
+            }
+            set => _perfilDeAcessoRepository = value;
+        }
         
         private readonly DomainContext _context;
         private string _connectionString;
@@ -79,6 +92,7 @@ namespace Repository
                 Type tipo when tipo == typeof(Autor) => (IRepository<T>)AutorRepository,
                 Type tipo when tipo == typeof(Tema) => (IRepository<T>)TemaRepository,
                 Type tipo when tipo == typeof(Categoria) => (IRepository<T>)CategoriaRepository,
+                Type tipo when tipo == typeof(PerfilDeAcesso) => (IRepository<T>)PerfilDeAcessoRepository,
                 _ => null
             };
 

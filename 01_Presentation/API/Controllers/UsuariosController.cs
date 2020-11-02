@@ -24,5 +24,26 @@ namespace API.Controllers
         [HttpGet("{usuarioId}")]
         public IActionResult GetUsuario(string usuarioId) => 
             Ok(new UsuarioModel(_usuarioService.Obter(usuarioId).Result));
+
+        [HttpPost]
+        public IActionResult CreateUsuario([FromBody] UsuarioModel usuario) => 
+            Ok(new UsuarioModel(_usuarioService.Criar(usuario?.Email, usuario?.Senha, usuario?.PerfilDeAcesso)));
+
+        [HttpPut("{id}")]
+        public IActionResult UpdateUsuario(string id, [FromBody] UsuarioModel usuario) =>
+            Ok(new UsuarioModel(_usuarioService.AtualizarAsync(id, usuario?.Email, usuario?.PerfilDeAcesso).Result));
+
+        [HttpPatch("{id}")]
+        public IActionResult AlterarSenha(string id, [FromBody] TrocaDeSenhaModel trocaDeSenha)
+        {
+            _usuarioService.AlterarSenhaAsync(
+                id,
+                trocaDeSenha?.SenhaAtual,
+                trocaDeSenha?.NovaSenha,
+                trocaDeSenha?.ConfirmacaoDeSenha
+            ).Wait();
+
+            return NoContent();
+        } 
     }
 }

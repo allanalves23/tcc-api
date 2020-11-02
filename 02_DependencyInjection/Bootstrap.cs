@@ -28,6 +28,7 @@ namespace _02_DependencyInjection
 
             services.AddTransient<IUnitOfWork, UnitOfWork>();
             services.AddTransient<IArtigoService, ArtigoService>();
+            services.AddTransient<IPerfilDeAcessoService, PerfilDeAcessoService>();
             services.AddTransient<IUsuarioService, UsuarioService>();
             services.AddTransient<IAutorService, AutorService>();
             services.AddTransient<ITemaService, TemaService>();

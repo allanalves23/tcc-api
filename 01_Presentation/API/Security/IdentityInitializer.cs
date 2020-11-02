@@ -27,14 +27,14 @@ namespace API.Security
         {
             if (_context.Database.EnsureCreated())
             {
-                if (!_roleManager.RoleExistsAsync(RolesModel.Product).Result)
+                if (!_roleManager.RoleExistsAsync(RolesModel.Principal).Result)
                 {
                     IdentityResult resultado = _roleManager.CreateAsync(
-                        new IdentityRole(RolesModel.Product)).Result;
+                        new IdentityRole(RolesModel.Principal)).Result;
 
                     if (!resultado.Succeeded)
                         throw new Exception(
-                            $"Erro durante a criação da role {RolesModel.Product}.");
+                            $"Erro durante a criação da role {RolesModel.Principal}.");
                 }
 
                 SeedUsers();
@@ -46,18 +46,18 @@ namespace API.Security
             await CreateUser(
                 new Usuario()
                 {
-                    UserName = "Allan Wanderley",
+                    UserName = "awallan259@gmail.com",
                     Email = "awallan259@gmail.com",
                     EmailConfirmed = true
-                }, "Pass123$", RolesModel.Product);
+                }, "Pass123$", RolesModel.Principal);
 
             await CreateUser(
                 new Usuario()
                 {
-                    UserName = "Davi Custodio",
+                    UserName = "davi.demk@yahoo.com.br",
                     Email = "davi.demk@yahoo.com.br",
                     EmailConfirmed = true
-                }, "Pass123$", RolesModel.Product);
+                }, "Pass123$", RolesModel.Principal);
         }
 
         private async Task CreateUser(

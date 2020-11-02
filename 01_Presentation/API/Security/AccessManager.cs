@@ -5,6 +5,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using API.Models.Identity;
 using Core.Entities;
+using Core.Interfaces.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 
@@ -16,23 +17,27 @@ namespace API.Security
         private SignInManager<Usuario> _signInManager;
         private SigningConfigurations _signingConfigurations;
         private TokenConfigurationsModel _tokenConfigurations;
+        private IPerfilDeAcessoService _perfilDeAcessoService;
 
         public AccessManager(
             UserManager<Usuario> userManager,
             SignInManager<Usuario> signInManager,
             SigningConfigurations signingConfigurations,
-            TokenConfigurationsModel tokenConfigurations)
+            TokenConfigurationsModel tokenConfigurations,
+            IPerfilDeAcessoService perfilDeAcessoService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _signingConfigurations = signingConfigurations;
             _tokenConfigurations = tokenConfigurations;
+            _perfilDeAcessoService = perfilDeAcessoService;
         }
 
         public async Task<CredentialModel> ValidateCredentials(UserModel user)
         {
             bool credenciaisValidas = false;
             Usuario userIdentity = null;
+            PerfilDeAcesso perfilDeAcesso = null;
 
             user.Validate();
 
@@ -49,13 +54,17 @@ namespace API.Security
                     );
 
                     if (resultadoLogin.Succeeded)
-                        credenciaisValidas = await _userManager.IsInRoleAsync(userIdentity, RolesModel.Product);
+                    {
+                        credenciaisValidas = await _userManager.IsInRoleAsync(userIdentity, RolesModel.Principal);
+                        perfilDeAcesso = _perfilDeAcessoService.Obter(userIdentity.Id);
+                    } else
+                        throw new UnauthorizedAccessException("E-mail ou senha inválidos");
                 } else
                     throw new UnauthorizedAccessException("E-mail ou senha inválidos");
             } else
                 throw new InvalidOperationException("Ocorreu um erro desconhecido, se persistir reporte");
 
-            return new CredentialModel(credenciaisValidas, new UserModel(userIdentity.Id, userIdentity.Email, userIdentity.UserName));
+            return new CredentialModel(credenciaisValidas, new UserModel(userIdentity.Id, userIdentity.Email, userIdentity.UserName, perfilDeAcesso.Perfil.ToString()));
         }
 
         public TokenModel GenerateToken(UserModel user)

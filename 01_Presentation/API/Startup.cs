@@ -34,7 +34,17 @@ namespace API
 
             services.AddDbContext<ApiContext>();
 
-            services.AddIdentity<Usuario, IdentityRole>()
+            services.AddIdentity<Usuario, IdentityRole>(options => 
+            {
+                options.Password = new PasswordOptions
+                {
+                    RequireDigit = true,
+                    RequiredLength = 8,
+                    RequireLowercase = true,
+                    RequireUppercase = true,
+                    RequireNonAlphanumeric = true
+                };
+            })
                 .AddEntityFrameworkStores<ApiContext>()
                 .AddDefaultTokenProviders();
 
@@ -55,8 +65,8 @@ namespace API
         public void Configure(
             IApplicationBuilder app, 
             IWebHostEnvironment env, 
-            DomainContext baseContext,
-            ApiContext context,
+            DomainContext domainContext,
+            ApiContext apiContext,
             UserManager<Usuario> userManager,
             RoleManager<IdentityRole> roleManager
         )
@@ -70,9 +80,9 @@ namespace API
 
             app.UseAuthorization();
 
-            new IdentityInitializer(context, userManager, roleManager).Initialize();
+            new IdentityInitializer(apiContext, userManager, roleManager).Initialize();
 
-            baseContext.Database.Migrate();
+            domainContext.Database.Migrate();
 
             app.UseMyMiddlewares();
 

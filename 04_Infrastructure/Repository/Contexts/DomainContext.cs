@@ -12,6 +12,7 @@ namespace Repository
         public DbSet<Tema> Temas { get; set; }
         public DbSet<Categoria> Categorias { get; set; }
         public DbSet<Autor> Autores { get; set; }
+        public DbSet<PerfilDeAcesso> PerfisDeAcesso { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -19,6 +20,7 @@ namespace Repository
             builder.ApplyConfiguration(new AutorConfiguration());
             builder.ApplyConfiguration(new TemaConfiguration());
             builder.ApplyConfiguration(new CategoriaConfiguration());
+            builder.ApplyConfiguration(new PerfilDeAcessoConfiguration());
         }
     }
 }
