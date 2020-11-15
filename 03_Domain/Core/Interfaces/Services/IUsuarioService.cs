@@ -6,7 +6,7 @@ namespace Core.Interfaces.Services
 {
     public interface IUsuarioService
     {
-        Task<(Usuario, PerfilDeAcesso)> ObterAsync(string id);
+        Task<(Usuario usuario, PerfilDeAcesso perfilDeAcesso)> ObterAsync(string id);
         IEnumerable<(Usuario, PerfilDeAcesso)> Obter(string termo, int skip, int take);
         void DefinirPerfilDeAcesso(Usuario usuario, string perfil);
         (Usuario, PerfilDeAcesso) Criar(string email, string senha, string perfil);
@@ -14,5 +14,6 @@ namespace Core.Interfaces.Services
         Task AlterarSenhaAsync(string id, string senhaAtual, string novaSenha, string confirmacaoNovaSenha);
         void Remover(string id);
         void Reativar(string id);
+        bool EhAdmin(string usuarioId);
     }
 }

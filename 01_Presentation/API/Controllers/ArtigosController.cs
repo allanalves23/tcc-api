@@ -18,8 +18,8 @@ namespace API.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetArtigos(string termo, int? skip = 0, int? take = 10) => 
-            Ok(_artigoService.Obter(termo, skip, take).Select(item => new ArtigoModel(item)));
+        public IActionResult GetArtigos(string termo, int? skip = 0, int? take = 10, bool all = false) => 
+            Ok(_artigoService.Obter(termo, User.UserIdSession(), visualizarTodos: all, skip, take).Select(item => new ArtigoModel(item)));
 
         [HttpGet("{urlPersonalizada}")]
         public IActionResult GetArtigo(string urlPersonalizada) => Ok(new ArtigoModel(_artigoService.Obter(urlPersonalizada)));

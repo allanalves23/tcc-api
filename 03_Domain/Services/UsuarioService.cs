@@ -212,5 +212,13 @@ namespace Services
 
             return perfilDeAcesso;
         }
+
+        public bool EhAdmin(string usuarioId)
+        {
+            PerfilDeAcesso perfilDeAcesso = _perfilDeAcessoService.Obter(usuarioId)
+                ?? throw new ArgumentNullException("Perfil de acesso não encontrado");
+
+            return perfilDeAcesso?.Perfil == TipoUsuario.Admin;
+        }
     }
 }

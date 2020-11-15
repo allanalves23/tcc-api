@@ -10,10 +10,10 @@ namespace Services
 {
     public class ArtigoService : BaseService<Artigo>, IArtigoService
     {
-        private UserManager<Usuario> _userManager;
-        private IAutorService _autorService;
-        private ITemaService _temaService;
-        private ICategoriaService _categoriaService;
+        private readonly UserManager<Usuario> _userManager;
+        private readonly IAutorService _autorService;
+        private readonly ITemaService _temaService;
+        private readonly ICategoriaService _categoriaService;
 
         public ArtigoService(
             IUnitOfWork unitOfWork,
@@ -149,18 +149,40 @@ namespace Services
             return artigo;
         }
 
-        public IEnumerable<Artigo> Obter(string termo, int? skip = 0, int? take = 10) =>
+        public IEnumerable<Artigo> Obter(string termo, string usuarioId, bool visualizarTodos = true, int? skip = 0, int? take = 10) =>
             Obter(
-                item => 
-                (item.Titulo.StartsWith(termo ?? "") 
-                || 
-                (
-                    !string.IsNullOrEmpty(item.Descricao) 
-                    && item.Descricao.StartsWith(termo ?? "")
-                ))
-                && item.Estado != EstadoArtigo.Removido,
+                ObterTipoDeConsultaDeArtigo(termo, usuarioId, visualizarTodos),
                 skip,
                 take
             );
+
+        private Func<Artigo, bool> ObterTipoDeConsultaDeArtigo(string termo, string usuarioId, bool visualizarTodos)
+        {
+            if (!_autorService.AutorEhAdmin(usuarioId) || (_autorService.AutorEhAdmin(usuarioId) && visualizarTodos == false))
+            {
+                Autor autor = _autorService.Obter(usuarioId);
+
+                return (item => 
+                        (item.Titulo.StartsWith(termo ?? "") 
+                        || 
+                        (
+                            !string.IsNullOrEmpty(item.Descricao) 
+                            && item.Descricao.StartsWith(termo ?? "")
+                        ))
+                        && item.Estado != EstadoArtigo.Removido
+                        && item.AutorId == autor?.Id);
+            } else {
+                return (item => 
+                        (item.Titulo.StartsWith(termo ?? "") 
+                        || 
+                        (
+                            !string.IsNullOrEmpty(item.Descricao) 
+                            && item.Descricao.StartsWith(termo ?? "")
+                        ))
+                        && item.Estado != EstadoArtigo.Removido);
+            }
+        }
+
+        
     }
 }

@@ -2,17 +2,18 @@ using System;
 using Core.Entities;
 using Core.Interfaces.Repository;
 using Core.Interfaces.Services;
-using Microsoft.AspNetCore.Identity;
 
 namespace Services
 {
     public class AutorService : BaseService<Autor>, IAutorService
     {
-        private UserManager<Usuario> _userManager;
+        private readonly IUsuarioService _usuarioService;
+        private readonly IPerfilDeAcessoService _perfilDeAcessoService;
 
-        public AutorService(IUnitOfWork unitOfWork, UserManager<Usuario> userManager) 
+        public AutorService(IUnitOfWork unitOfWork, IUsuarioService usuarioService, IPerfilDeAcessoService perfilDeAcessoService) 
             : base(unitOfWork) {
-                _userManager = userManager;
+                _usuarioService = usuarioService;
+                _perfilDeAcessoService = perfilDeAcessoService;
             }
 
         public Autor Obter(string idUsuario, bool lancaExcecao = false)
@@ -30,7 +31,7 @@ namespace Services
 
         public Autor Criar(string idUsuario)
         {
-            Usuario usuario = _userManager.FindByIdAsync(idUsuario).Result
+            Usuario usuario = _usuarioService.ObterAsync(idUsuario).Result.usuario
                 ?? throw new ArgumentException("Usuário não encontrado");
 
             var autor = new Autor(usuario);
@@ -54,5 +55,7 @@ namespace Services
 
             return autor;
         }
+
+        public bool AutorEhAdmin(string usuarioId) => _usuarioService.EhAdmin(usuarioId);
     }
 }
