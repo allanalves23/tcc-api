@@ -7,7 +7,7 @@ using API.Models;
 namespace API.Controllers
 {
     [ApiController]
-    [Route("[controller]"), Authorize]
+    [Route("[controller]"), Authorize("Administrador")]
     public class UsuariosController : ControllerBase
     {
         public IUsuarioService _usuarioService;

@@ -29,8 +29,10 @@ namespace API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
+            services.UseMyAuthorization();
             services.UseMyServices(Configuration);
+
+            services.AddControllers();
 
             services.AddDbContext<ApiContext>();
 
@@ -56,8 +58,6 @@ namespace API
             SigningConfigurations signingConfigurations = services.AddSigningSettings();
             services.AddJwtSecurity(signingConfigurations, tokenConfigurations);
 
-            services.UseMyPolicies();
-
             services.UseMyCors(Configuration);
         }
 
@@ -78,6 +78,7 @@ namespace API
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             new IdentityInitializer(apiContext, userManager, roleManager).Initialize();

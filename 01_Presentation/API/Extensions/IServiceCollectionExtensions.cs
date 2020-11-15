@@ -8,7 +8,7 @@ namespace API.Extensions
         public static void UseMyServices(this IServiceCollection services, IConfiguration configuration) =>
             _02_DependencyInjection.Bootstrap.Configure(services, configuration);
 
-        public static void UseMyPolicies(this IServiceCollection services) =>
+        public static void UseMyAuthorization(this IServiceCollection services) =>
             Policies.Bootstrap.Configure(services);
 
         public static void UseMyCors(this IServiceCollection services, IConfiguration configuration) =>
