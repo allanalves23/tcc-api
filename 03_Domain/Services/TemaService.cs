@@ -18,8 +18,8 @@ namespace Services
                 take
             );
 
-        public Tema Obter(int? idTema) =>
-            Obter(item => item.Id == idTema.Value && !item.DataRemocao.HasValue) 
+        public Tema Obter(int? idTema, bool incluirRemovido = false) =>
+            Obter(item => item.Id == idTema && (incluirRemovido ? incluirRemovido : !item.DataRemocao.HasValue)) 
                 ?? throw new ArgumentNullException("Tema não encontrado");
 
         public Tema Criar(string nome, string descricao)

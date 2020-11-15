@@ -83,7 +83,7 @@ namespace Services
 
             if (temaId.HasValue)
             {
-                Tema tema = _temaService.Obter(temaId);
+                Tema tema = _temaService.Obter(temaId, incluirRemovido: true);
                 artigo.AplicarTema(tema);
             } else {
                 artigo.RemoverTema();
@@ -99,7 +99,7 @@ namespace Services
             
             if (categoriaId.HasValue)
             {
-                Categoria categoria = _categoriaService.Obter(categoriaId);
+                Categoria categoria = _categoriaService.Obter(categoriaId, incluirRemovido: true);
                 artigo.AplicarCategoria(categoria);
             } else {
                 artigo.RemoverCategoria();

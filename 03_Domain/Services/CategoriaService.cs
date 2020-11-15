@@ -22,9 +22,8 @@ namespace Services
                 skip, 
                 take
             );
-
-        public Categoria Obter(int? idCategoria) =>
-            Obter(item => item.Id == idCategoria.Value && !item.DataRemocao.HasValue) 
+        public Categoria Obter(int? idCategoria, bool incluirRemovido = false) =>
+            Obter(item => item.Id == idCategoria.Value && (incluirRemovido ? incluirRemovido : !item.DataRemocao.HasValue)) 
                 ?? throw new ArgumentNullException("Categoria não encontrada");
 
         public IEnumerable<Categoria> Obter(string termo, int temaId, int? skip, int? take)
