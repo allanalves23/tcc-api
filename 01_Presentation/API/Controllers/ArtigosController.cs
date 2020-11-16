@@ -22,8 +22,8 @@ namespace API.Controllers
             Ok(_artigoService.Obter(termo, User.UserIdSession(), visualizarTodos: all, skip, take).Select(item => new ArtigoModel(item)));
         
         [HttpGet("quantidade")]
-        public IActionResult GetQuantidadeArtigos(bool all = false) =>
-            Ok(_artigoService.ObterQuantidade(User.UserIdSession(), visualizarTodos: all));
+        public IActionResult GetQuantidadeArtigos(string termo, bool all = false) =>
+            Ok(_artigoService.ObterQuantidade(termo, User.UserIdSession(), all));
 
         [HttpGet("{urlPersonalizada}")]
         public IActionResult GetArtigo(string urlPersonalizada) => Ok(new ArtigoModel(_artigoService.Obter(urlPersonalizada)));

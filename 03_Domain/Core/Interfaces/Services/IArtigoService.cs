@@ -11,7 +11,7 @@ namespace Core.Interfaces.Services
         Artigo Atualizar(int? id, string urlPersonalizada);
         Artigo Obter(int? idArtigo);
         Artigo Obter(string urlPersonalizada);
-        int ObterQuantidade(string usuarioId, bool visualizarTodos = true);
+        int ObterQuantidade(string termo, string usuarioId, bool visualizarTodos = true);
         IEnumerable<Artigo> Obter(string termo, string usuarioId, bool visualizarTodos = true, int? skip = 0, int? take = 10);
         Artigo Remover(int? idArtigo);
         Artigo Publicar(int? idArtigo);
