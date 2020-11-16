@@ -5,6 +5,7 @@ namespace Core.Interfaces.Services
 {
     public interface ICategoriaService 
     { 
+        int ObterQuantidade(string termo);
         IEnumerable<Categoria> Obter(string termo, int? skip, int? take);
         IEnumerable<Categoria> Obter(string termo, int temaId, int? skip, int? take);
         Categoria Obter(int? idCategoria, bool incluirRemovido = false);

@@ -18,10 +18,17 @@ namespace Services
 
         public IEnumerable<Categoria> Obter(string termo, int? skip, int? take) => 
             Obter(
-                item => (string.IsNullOrEmpty(termo) || item.Nome.ToUpper().StartsWith(termo.ToUpper())) && !item.DataRemocao.HasValue,
+                ObterFiltroDeBusca(termo),
                 skip, 
                 take
             );
+        
+        public int ObterQuantidade(string termo) =>
+            Contar(ObterFiltroDeBusca(termo));
+
+        private Func<Categoria, bool> ObterFiltroDeBusca(string termo) =>
+            item => (string.IsNullOrEmpty(termo) || item.Nome.ToUpper().StartsWith(termo.ToUpper())) && !item.DataRemocao.HasValue;
+
         public Categoria Obter(int? idCategoria, bool incluirRemovido = false) =>
             Obter(item => item.Id == idCategoria.Value && (incluirRemovido ? incluirRemovido : !item.DataRemocao.HasValue)) 
                 ?? throw new ArgumentNullException("Categoria não encontrada");
