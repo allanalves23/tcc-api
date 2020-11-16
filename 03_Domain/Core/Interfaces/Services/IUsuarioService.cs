@@ -6,6 +6,7 @@ namespace Core.Interfaces.Services
 {
     public interface IUsuarioService
     {
+        int ObterQuantidade(string termo);
         Task<(Usuario usuario, PerfilDeAcesso perfilDeAcesso)> ObterAsync(string id);
         IEnumerable<(Usuario, PerfilDeAcesso)> Obter(string termo, int skip, int take);
         void DefinirPerfilDeAcesso(Usuario usuario, string perfil);

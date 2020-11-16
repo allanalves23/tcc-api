@@ -29,10 +29,7 @@ namespace Services
         public IEnumerable<(Usuario, PerfilDeAcesso)> Obter(string termo, int skip, int take) =>
             _userManager
                 .Users
-                .Where(item => 
-                    string.IsNullOrEmpty(termo) 
-                    || (item.NormalizedEmail == termo.ToUpper())
-                )
+                .Where(ObterFiltroDeBusca(termo))
                 .Skip(skip)
                 .Take(take)
                 .Select(item => 
@@ -40,6 +37,12 @@ namespace Services
                         item, _perfilDeAcessoService.Obter(item.Id)
                     ).ToValueTuple()
                 );
+
+        public int ObterQuantidade(string termo) =>
+            _userManager.Users.Count(ObterFiltroDeBusca(termo));
+
+        private Func<Usuario, bool> ObterFiltroDeBusca(string termo) =>
+            item => string.IsNullOrEmpty(termo) || (item.NormalizedEmail.StartsWith(termo.ToUpper()));
 
         public void DefinirPerfilDeAcesso(Usuario usuario, string perfil)
         {

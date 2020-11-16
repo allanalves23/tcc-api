@@ -21,6 +21,10 @@ namespace API.Controllers
         public IActionResult GetUsuarios(string termo, int skip = 0, int take = 15) => 
             Ok(_usuarioService.Obter(termo, skip, take).Select(item => new UsuarioModel(item)));
 
+        [HttpGet("quantidade")]
+        public IActionResult GetCountUsuarios(string termo) =>
+            Ok(_usuarioService.ObterQuantidade(termo));
+
         [HttpGet("{usuarioId}")]
         public IActionResult GetUsuario(string usuarioId) => 
             Ok(new UsuarioModel(_usuarioService.ObterAsync(usuarioId).Result));
