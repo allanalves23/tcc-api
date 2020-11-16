@@ -30,15 +30,15 @@ namespace Repository.Repositories
         public IEnumerable<T> Get<TReturn>(Func<T, bool> filterCriteria, int? skip = 0, int? take = 10, Func<T, TReturn> sortCriteria = null) =>
             sortCriteria == null ?
                 Entity
+                    .Where(filterCriteria)
                     .Skip(skip.Value)
                     .Take(take.Value)
-                    .Where(filterCriteria)
                     .ToList()
             :
                 Entity
+                    .Where(filterCriteria)
                     .Skip(skip.Value)
                     .Take(take.Value)
-                    .Where(filterCriteria)
                     .OrderByDescending(sortCriteria)
                     .ToList();
 
