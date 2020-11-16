@@ -2,6 +2,7 @@
 
 [![All Contributors](https://img.shields.io/badge/all_contributors-2-blue.svg?style=flat-square)](#contributors)
 [![Build status](https://dev.azure.com/allanalves23/allanalves23/_apis/build/status/TCC-API)](https://dev.azure.com/allanalves23/allanalves23/_build/latest?definitionId=1)
+[![Release Status](https://vsrm.dev.azure.com/allanalves23/_apis/public/Release/badge/0a28a34f-5627-4ece-820c-b2d86e27cb5d/1/1)
 
 ## Trabalho de conclusão de curso - Instituição Unicarioca de Ensino Superior
 
