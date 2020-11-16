@@ -30,5 +30,6 @@ namespace Services
 
         public void Salvar() => _unitOfWork.Commit();
 
+        public int Contar(Func<T, bool> criteria) => _unitOfWork.GetRepository<T>().Count(criteria);
     }
 }
