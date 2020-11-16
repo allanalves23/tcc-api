@@ -156,6 +156,9 @@ namespace Services
                 take
             );
 
+        public int ObterQuantidade(string usuarioId, bool visualizarTodos = true) =>
+            Contar(ObterTipoDeConsultaDeArtigo(termo: string.Empty, usuarioId, visualizarTodos));
+
         private Func<Artigo, bool> ObterTipoDeConsultaDeArtigo(string termo, string usuarioId, bool visualizarTodos)
         {
             if (!_autorService.AutorEhAdmin(usuarioId) || (_autorService.AutorEhAdmin(usuarioId) && visualizarTodos == false))

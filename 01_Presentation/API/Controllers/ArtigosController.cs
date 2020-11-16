@@ -20,6 +20,10 @@ namespace API.Controllers
         [HttpGet]
         public IActionResult GetArtigos(string termo, int? skip = 0, int? take = 10, bool all = false) => 
             Ok(_artigoService.Obter(termo, User.UserIdSession(), visualizarTodos: all, skip, take).Select(item => new ArtigoModel(item)));
+        
+        [HttpGet("quantidade")]
+        public IActionResult GetQuantidadeArtigos(bool all = false) =>
+            Ok(_artigoService.ObterQuantidade(User.UserIdSession(), visualizarTodos: all));
 
         [HttpGet("{urlPersonalizada}")]
         public IActionResult GetArtigo(string urlPersonalizada) => Ok(new ArtigoModel(_artigoService.Obter(urlPersonalizada)));
