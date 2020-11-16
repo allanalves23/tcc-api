@@ -105,7 +105,7 @@ namespace Services
 
             Usuario usuario = ConstruirUsuarioAsync(email).Result;
             CriarSenhaAsync(usuario, senha).Wait();
-            _userManager.AddToRoleAsync(usuario, "tcc_api");
+            _userManager.AddToRoleAsync(usuario, "tcc_api").Wait();
 
             PerfilDeAcesso perfilDeAcesso = AdicionarPerfilDeAcesso(usuario, perfil);
             
