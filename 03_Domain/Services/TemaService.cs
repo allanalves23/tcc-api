@@ -11,12 +11,17 @@ namespace Services
         public TemaService(IUnitOfWork unitOfWork) 
             : base(unitOfWork) { }
 
+        private Func<Tema, bool> ObterFiltroDeBusca(string termo) =>
+            item => (string.IsNullOrEmpty(termo) || item.Nome.ToUpper().StartsWith(termo.ToUpper())) && !item.DataRemocao.HasValue; 
+
         public IEnumerable<Tema> Obter(string termo, int? skip, int? take) => 
             Obter(
-                item => (string.IsNullOrEmpty(termo) || item.Nome.ToUpper().StartsWith(termo.ToUpper())) && !item.DataRemocao.HasValue,
+                ObterFiltroDeBusca(termo),
                 skip, 
                 take
             );
+
+        public int ObterQuantidade(string termo) => Contar(ObterFiltroDeBusca(termo));
 
         public Tema Obter(int? idTema, bool incluirRemovido = false) =>
             Obter(item => item.Id == idTema && (incluirRemovido ? incluirRemovido : !item.DataRemocao.HasValue)) 
