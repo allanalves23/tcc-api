@@ -11,6 +11,7 @@ using API.Security;
 using Repository;
 using Repository.Contexts;
 using Core.Entities;
+using Elastic.Apm.NetCoreAll;
 
 namespace API
 {
@@ -88,6 +89,8 @@ namespace API
             app.UseMyMiddlewares();
 
             app.UseCors("AllowedOrigins");
+
+            app.UseAllElasticApm(Configuration);
 
             app.UseEndpoints(endpoints =>
             {
