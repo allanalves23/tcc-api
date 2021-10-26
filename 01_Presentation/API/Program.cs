@@ -1,4 +1,5 @@
 using System;
+using Elastic.Apm.SerilogEnricher;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 using Serilog;
@@ -19,6 +20,7 @@ namespace API
                 {
                     var settings = config.Build();
                     Serilog.Log.Logger = new LoggerConfiguration()
+                        .Enrich.WithElasticApmCorrelationInfo()
                         .Enrich.FromLogContext()
                         .WriteTo.Elasticsearch(new ElasticsearchSinkOptions(new Uri(settings["Elasticsearch:Uri"]))
                         {
