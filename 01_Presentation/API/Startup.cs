@@ -12,6 +12,7 @@ using Repository;
 using Repository.Contexts;
 using Core.Entities;
 using Elastic.Apm.NetCoreAll;
+using Serilog;
 
 namespace API
 {
@@ -30,6 +31,8 @@ namespace API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddHealthChecks();
+
             services.UseMyAuthorization();
             services.UseMyServices(Configuration);
 
@@ -72,6 +75,15 @@ namespace API
             RoleManager<IdentityRole> roleManager
         )
         {
+            app.UseMiddleware<RequestResponseLoggingMiddleware>();
+
+            app.UseSerilogRequestLogging(options =>
+            {
+                options.EnrichDiagnosticContext = LogHelper.EnrichFromRequest;
+            });
+
+            app.UseMyMiddlewares();
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -86,7 +98,6 @@ namespace API
 
             domainContext.Database.Migrate();
 
-            app.UseMyMiddlewares();
 
             app.UseCors("AllowedOrigins");
 
@@ -95,6 +106,7 @@ namespace API
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHealthChecks("/health");
             });
         }
     }
